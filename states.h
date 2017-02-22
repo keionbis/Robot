@@ -1,6 +1,6 @@
 #ifndef STATES_H
 #define STATES_H
-#include <Arduino.h>
+
 typedef enum DriveStates {
     LINE_FOLLOW = 0, // Only one solid centered line to follow
     INTERSECTION = 1, // Come to an intersection
@@ -10,10 +10,10 @@ typedef enum DriveStates {
     REMOVE_ROD = 5, //load rod into gripper
     PLACE_ROD = 6, // Load rod from gripper into reactor
     REVERSE = 7, // line follow in reverse until the center line is found
-    STOP = 8, //stop all motors 
-    GRIPPER_STRAIGHT = 9 // the gripper is at the end of its linear path.   
+    STOP = 8, //stop all motors
+    GRIPPER_STRAIGHT = 9 // the gripper is at the end of its linear path.
 };
-void Line_Follow();
+
 typedef enum DriveSide {
   LEFT = 5, //Pin numbers
   RIGHT = 2
@@ -23,11 +23,7 @@ typedef enum DriveDirection {
   FORWARD = 1,
   BACKWARD = 0
 };
-
-#define LEFT_DIR_PIN 4
-#define LEFT_PWM_PIN 2 //can't change because implemented at timer register lvl
-#define RIGHT_DIR_PIN 6
-#define RIGHT_PWM_PIN 5 //can't change because implemented at timer register lvl
+void Line_Follow();
 
 #define LEFT_REVERSED 1
 #define RIGHT_REVERSED 0
@@ -45,10 +41,10 @@ static void initDrivePWM() {
     ICR3 = PWM_COUNT; // to count up to
     OCR3A = 0; //default to off
     OCR3B = 0; //default to off
-    
+
 }
 
-static void setDrivePWM(unsigned int duty_cycle, DriveSide side,DriveDirection newDir) { 
+static void setDrivePWM(unsigned int duty_cycle, DriveSide side,DriveDirection newDir) {
   //Sets the new PWM duty cycle; duty cycle scaled from 0 to 65535 for 0 - 100 percent
   constrain(duty_cycle,0,65535);
   if(side == LEFT)
