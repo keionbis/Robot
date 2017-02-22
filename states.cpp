@@ -10,6 +10,105 @@ int Intersections;
 Intersection_States ReactorStates[8];
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
 
+
+void Reactor_State_Set()
+{
+  for(int i = 0;i<2;i++)
+    {
+    switch(Message[i])
+      {
+        case 0:
+          ReactorStates[0] = EMPTY;
+          ReactorStates[2] = EMPTY;
+          ReactorStates[4] = EMPTY;
+          ReactorStates[6] = EMPTY;
+          break;
+        case 1:
+          ReactorStates[0] = FULL;
+          ReactorStates[2] = EMPTY;
+          ReactorStates[4] = EMPTY;
+          ReactorStates[6] = EMPTY;
+          break;
+        case 3:
+          ReactorStates[0] = FULL;
+          ReactorStates[2] = FULL;
+          ReactorStates[4] = EMPTY;
+          ReactorStates[6] = EMPTY;
+          break;
+        case 5:
+          ReactorStates[0] = FULL;
+          ReactorStates[2] = EMPTY;
+          ReactorStates[4] = FULL;
+          ReactorStates[6] = EMPTY;
+          break;
+        case 6:
+          ReactorStates[0] = EMPTY;
+          ReactorStates[2] = FULL;
+          ReactorStates[4] = FULL;
+          ReactorStates[6] = EMPTY;
+          break;
+        case 7:
+          ReactorStates[0] = FULL;
+          ReactorStates[2] = FULL;
+          ReactorStates[4] = FULL;
+          ReactorStates[6] = EMPTY;
+          break;
+        case 8:
+          ReactorStates[0] = EMPTY;
+          ReactorStates[2] = EMPTY;
+          ReactorStates[4] = EMPTY;
+          ReactorStates[6] = FULL;
+          break;
+        case 9:
+          ReactorStates[0] = FULL;
+          ReactorStates[2] = EMPTY;
+          ReactorStates[4] = EMPTY;
+          ReactorStates[6] = FULL;
+          break;
+        case 'A':
+          ReactorStates[0] = EMPTY;
+          ReactorStates[2] = FULL;
+          ReactorStates[4] = EMPTY;
+          ReactorStates[6] = FULL;
+          break;
+        case 'B':
+          ReactorStates[0] = FULL;
+          ReactorStates[2] = FULL;
+          ReactorStates[4] = EMPTY;
+          ReactorStates[6] = FULL;
+          break;
+        case 'C':
+          ReactorStates[0] = EMPTY;
+          ReactorStates[2] = EMPTY;
+          ReactorStates[4] = FULL;
+          ReactorStates[6] = FULL;
+          break;
+        case 'D':
+          ReactorStates[0] = FULL;
+          ReactorStates[2] = EMPTY;
+          ReactorStates[4] = FULL;
+          ReactorStates[6] = FULL;
+          break;
+        case 'E':
+          ReactorStates[0] = EMPTY;
+          ReactorStates[2] = FULL;
+          ReactorStates[4] = FULL;
+          ReactorStates[6] = FULL;
+          break;
+        case 'F':
+          ReactorStates[0] = FULL;
+          ReactorStates[2] = FULL;
+          ReactorStates[4] = FULL;
+          ReactorStates[6] = FULL;
+          break;
+        default:
+          Serial.println("I Dont know what the fuck you just did but it didnt make sense");
+          break;
+      }
+    }
+}
+
+
 void Interrupt_Setup()
 {
   attachInterrupt(digitalPinToInterrupt(Front_Limit_Switch),State_to_Docked,RISING);
@@ -22,17 +121,6 @@ void Servo_Setup()
 {
   FourbarServo.attach(9);
   GripperServo.write(10);
-}
-
-void Set_Reactor_States()
-{
-  for(int i = 0; i<8;i++)
-  {
-   //if(message =  full)
-   //{
-    //ReactorStates[i] =
-   //}
-  }
 }
 
 void Read_Line_Sensor()

@@ -1,6 +1,6 @@
 #ifndef MESSAGES_H_
 #define MESSAGES_H_
-extern int Message[50];
+
 class Messages {
 public:
 	typedef enum {kReserved,
@@ -23,6 +23,6 @@ public:
 private:
 	bool stopped;
 };
-extern int Message[50];
+extern int Message[2];
 
 #endif

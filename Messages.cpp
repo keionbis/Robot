@@ -1,6 +1,6 @@
 #include"headers.h"
 BTComms comms;
-int Message[50];
+int Message[2];
 Messages::Messages() {
 	stopped = false;
 }
@@ -17,9 +17,12 @@ void Messages::sendHeartbeat() {
 }
 
 void Messages::Store_Message(){
-  for (int i = 0; i < comms.getMessageLength(); i++) {
-    Message[i] = (comms.getMessageByte(i),HEX);
-  }
+  
+    Message[0] = (comms.getMessageByte(3),HEX);
+    Message[1] = (comms.getMessageByte(3),HEX);
+    Reactor_State_Set();
+    
+  
 }
 
 void Messages::printMessage() {

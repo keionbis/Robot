@@ -63,6 +63,7 @@ void State_to_Arm_Down();
 void State_to_Arm_Straight();
 void State_to_Arm_Raised();
 void State_to_Docked();
+void Reactor_State_Set();
 //***************************************************************************//
 #define LEFT_REVERSED 1
 #define RIGHT_REVERSED 0
