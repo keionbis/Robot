@@ -1,5 +1,6 @@
 #ifndef MESSAGES_H_
 #define MESSAGES_H_
+extern int Message[50];
 class Messages {
 public:
 	typedef enum {kReserved,

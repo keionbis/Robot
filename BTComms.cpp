@@ -5,9 +5,11 @@ BTComms::BTComms() {
 	messageLength = 0;
 	BTstate = kLookingForStart;
 }
+
 void BTComms::setup() {
   Serial3.begin(115200);
 }
+
 void BTComms::writeMessage(unsigned char b1, unsigned char b2, unsigned char b3) {
   Serial3.write(kMessageStart);
   Serial3.write(5);
@@ -22,7 +24,7 @@ int BTComms::getMessageLength() {
 }
 
 unsigned char BTComms::getMessageByte(unsigned index) {
-  return message[index];  
+  return message[index];
 }
 
 bool BTComms::read() {
@@ -52,4 +54,3 @@ bool BTComms::read() {
   }
   return false;
 }
-

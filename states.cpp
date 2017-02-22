@@ -7,6 +7,7 @@ Servo GripperServo;
 int runs = 0;
 int pos;
 int Intersections;
+Intersection_States ReactorStates[8];
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
 
 void Interrupt_Setup()
@@ -21,6 +22,17 @@ void Servo_Setup()
 {
   FourbarServo.attach(9);
   GripperServo.write(10);
+}
+
+void Set_Reactor_States()
+{
+  for(int i = 0; i<8;i++)
+  {
+   //if(message =  full)
+   //{
+    //ReactorStates[i] =
+   //}
+  }
 }
 
 void Read_Line_Sensor()
@@ -145,31 +157,3 @@ void State_to_Arm_Down()
 {
   currentArmState = ARMLOWERED;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//if(analogRead(0)>300&&analogRead(1)>300&&analogRead(2)>300&&analogRead(3)>300&&analogRead(4)>300&&analogRead(5)>300&&analogRead(6)>300&&analogRead(7)>300)
-  //{
-   // stepcount++;
-  //}
-  //if(stepcount == 5)
-  //{
-   // delay(300);
-    //setDrivePWMLeft(0);
-    //setDrivePWMRight(0);
-    //delay(100000);
-  //}

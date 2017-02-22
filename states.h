@@ -30,12 +30,19 @@ typedef enum ArmStates{
   ARMSTRAIGHT,
   ARMLOWERED
 };
+
+typedef enum Intersection_States{
+  FULL,
+  EMPTY
+};
 //*****************************Variable Definitions****************************//
 extern Servo FourbarServo;
 extern Servo GripperServo;
 extern DriveStates currentState;
 extern ArmStates currentArmState;
+extern Intersection_States IntersectionState;
 extern int Intersections;
+extern Intersection_States ReactorStates[8];
 //extern Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
 //*****************************Function Definitions****************************//
 void Line_Follow();

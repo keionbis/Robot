@@ -1,5 +1,6 @@
 #include"headers.h"
  DriveStates currentState;
+
 void setup() {
   Servo_Setup();
   initDrivePWM();
@@ -19,14 +20,16 @@ void loop() {
     case INTERSECTION :
       //check left and right statuses
       Stop();
-     // if()//bluetooth message[Intersections] = full
-//      {
-//        //currentState = Turn_Right()
-//      }
+        switch(ReactorStates[Intersections])
+        {
+          case FULL:
+            break;
+          case EMPTY:
+            break;
+        }
       break;
     case TURN_RIGHT :
       Turn_Right();
-
       break;
     case TURN_LEFT:
       Turn_Left();
