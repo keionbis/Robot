@@ -2,12 +2,13 @@
 Servo FourbarServo;
 Servo GripperServo;
 int pos = 22;
+int runs = 0;
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
 void setup() {
   FourbarServo.attach(9);
   GripperServo.write(100);
-  //initDrivePWM();
-
+  Serial.begin(15200);
+  initDrivePWM();
 }
 
 void loop() {
@@ -25,8 +26,10 @@ void loop() {
     case DOCKED:
       break;
     case REMOVE_ROD:
+      void Arm_State()
       break;
     case PLACE_ROD:
+      void Arm_State()
       break;
     case REVERSE:
       break;
@@ -34,9 +37,6 @@ void loop() {
       break;
     case GRIPPER_STRAIGHT:
       break;
-
-
+  }
     delay(15);
-
-
 }

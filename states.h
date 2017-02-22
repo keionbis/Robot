@@ -1,6 +1,6 @@
 #ifndef STATES_H
 #define STATES_H
-
+//*****************************State Definitions****************************//
 typedef enum DriveStates {
     LINE_FOLLOW = 0, // Only one solid centered line to follow
     INTERSECTION = 1, // Come to an intersection
@@ -12,8 +12,13 @@ typedef enum DriveStates {
     REVERSE = 7, // line follow in reverse until the center line is found
     STOP = 8, //stop all motors
     GRIPPER_STRAIGHT = 9 // the gripper is at the end of its linear path.
-};
 
+};
+typedef enum ArmStates{
+  ARM_LIFTED = 1, // upper limit switch triggered
+  ARM_STRAIGHT_OUT = 2,// arm at the end of its linear travel
+  ARM_LOWERED = 3// Lower limit switched triggered
+};
 typedef enum DriveSide {
   LEFT = 5, //Pin numbers
   RIGHT = 2
@@ -23,8 +28,21 @@ typedef enum DriveDirection {
   FORWARD = 1,
   BACKWARD = 0
 };
-void Line_Follow();
 
+//*****************************Function Definitions****************************//
+void Line_Follow();
+void Turn_Right();
+void Turn_Left();
+void Lift_Fourbar();
+void Lower_Fourbar();
+void Open_Gripper();
+void Close_Gripper();
+void Reverse();
+void Led_Empty();
+void Led_Loaded();
+void Stop();
+void Arm_State();
+//***************************************************************************//
 #define LEFT_REVERSED 1
 #define RIGHT_REVERSED 0
 #define PWM_FREQ 16000 //this isn't in rates because it isn't a control loop but the hardware timer PWM freq
@@ -43,7 +61,6 @@ static void initDrivePWM() {
     OCR3B = 0; //default to off
 
 }
-
 static void setDrivePWM(unsigned int duty_cycle, DriveSide side,DriveDirection newDir) {
   //Sets the new PWM duty cycle; duty cycle scaled from 0 to 65535 for 0 - 100 percent
   constrain(duty_cycle,0,65535);
@@ -84,13 +101,4 @@ static void setDrivePWM(unsigned int duty_cycle, DriveSide side,DriveDirection n
     }
   }
 }
-
-static void stopDrive() {
-  setDrivePWM(0, LEFT,FORWARD);
-  setDrivePWM(0, RIGHT,FORWARD);
-}
-
-
-
-
 #endif

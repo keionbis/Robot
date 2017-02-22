@@ -1,7 +1,5 @@
 #include"headers.h"
 
-void Line_Follow()
-{
 int drivepwmright, drivepwmleft;
     drivepwmleft = map(analogRead(2),35,1024,35000,10000);
     drivepwmright = map(analogRead(7),35,1024,35000,10000);
@@ -23,17 +21,30 @@ void Turn_Left()
 }
 void Lift_Fourbar()
 {
-  if(runs>1)
+  if(runs_upper != 1)
   {
-    FourbarServo.write(22);
+    pos = Upper_Servo_pos;
+    FourbarServo.write(pos);
+    runs_upper = 1
   }
+  pos = pos-1
   FourbarServo.write(pos);
-  
- 
+
 }
 void Lower_Fourbar()
 {
-   
+  {
+    if(runs_Lower != 1)
+    {
+      pos = Lower_Servo_pos;
+      FourbarServo.write(pos);
+      runs_Lower = 1
+    }
+
+    pos = pos+1
+    FourbarServo.write(pos);
+
+  }
 
 }
 void Open_Gripper()
@@ -63,25 +74,24 @@ void Led_Loaded()
   pixels.setPixelColor(i, pixels.Color(255,0,0));
   pixels.show();
 }
+void Stop()
+{
+  setDrivePWM(0, LEFT, BACKWARD);
+  setDrivePWM(0, RIGHT, BACKWARD);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void Arm_State()
+{
+  switch(ArmStates)
+  {
+    case ARM_LIFTED:
+      break;
+    case ARM_STRAIGHT_OUT:
+        break;
+    case ARM_LOWERED:
+        break;
+  }
+}
 //if(analogRead(0)>300&&analogRead(1)>300&&analogRead(2)>300&&analogRead(3)>300&&analogRead(4)>300&&analogRead(5)>300&&analogRead(6)>300&&analogRead(7)>300)
   //{
    // stepcount++;
@@ -93,5 +103,3 @@ void Led_Loaded()
     //setDrivePWMRight(0);
     //delay(100000);
   //}
-
-  
