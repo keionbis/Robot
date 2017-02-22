@@ -15,5 +15,8 @@ class BTComms {
     unsigned messageIndex;
     unsigned char kMessageStart = 0x5f;
 };
+void BT_setup();
+void BT_Data();
+void Send_HeartBeat();
 
 #endif

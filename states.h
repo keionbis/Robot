@@ -11,10 +11,10 @@ typedef enum DriveStates {
     REMOVE_ROD, //load rod into gripper
     PLACE_ROD, // Load rod from gripper into reactor
     REVERSE, // line follow in reverse until the center line is found
-    STOP, //stop all motors
-    GRIPPER_STRAIGHT // the gripper is at the end of its linear path.
+    STOP //stop all motors
+
 };
-extern DriveStates currentState;
+
 //extern int currentState;
 typedef enum DriveSide {
   LEFT = 5, //Pin numbers
@@ -25,10 +25,18 @@ typedef enum DriveDirection {
   FORWARD = 1,
   BACKWARD = 0
 };
+typedef enum ArmStates{
+  ARMRAISED,
+  ARMSTRAIGHT,
+  ARMLOWERED
+};
 //*****************************Variable Definitions****************************//
 extern Servo FourbarServo;
 extern Servo GripperServo;
-
+extern DriveStates currentState;
+extern ArmStates currentArmState;
+extern int Intersections;
+extern Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
 //*****************************Function Definitions****************************//
 void Line_Follow();
 void Turn_Right();
@@ -42,6 +50,7 @@ void Led_Empty();
 void Led_Loaded();
 void Stop();
 void Servo_Setup();
+void Interrupt_Setup();
 //***************************************************************************//
 #define LEFT_REVERSED 1
 #define RIGHT_REVERSED 0

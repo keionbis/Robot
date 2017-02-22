@@ -9,12 +9,15 @@ msg.setup();
 void BT_Data()
 {
   if (msg.read()) {
-    msg.printMessage();
+    msg.Store_Message();
   }
+}
+
+void Send_HeartBeat()
+{
   if (millis() > timeForHeartbeat) {
     timeForHeartbeat = millis() + 1000;
     msg.sendHeartbeat();
   }
-
 }
 

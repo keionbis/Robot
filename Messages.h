@@ -12,7 +12,7 @@ public:
 		kHeartbeat} MessageType;
 
 	Messages();
-
+  void Store_Message();
 	bool isStopped();
 	void sendHeartbeat();
 	bool read();
@@ -22,5 +22,6 @@ public:
 private:
 	bool stopped;
 };
+extern int Message[50];
 
 #endif
