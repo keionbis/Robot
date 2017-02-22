@@ -36,7 +36,7 @@ extern Servo GripperServo;
 extern DriveStates currentState;
 extern ArmStates currentArmState;
 extern int Intersections;
-extern Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
+//extern Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
 //*****************************Function Definitions****************************//
 void Line_Follow();
 void Turn_Right();
@@ -51,6 +51,11 @@ void Led_Loaded();
 void Stop();
 void Servo_Setup();
 void Interrupt_Setup();
+void Read_Line_Sensor();
+void State_to_Arm_Down();
+void State_to_Arm_Straight();
+void State_to_Arm_Raised();
+void State_to_Docked();
 //***************************************************************************//
 #define LEFT_REVERSED 1
 #define RIGHT_REVERSED 0

@@ -19,10 +19,10 @@ void loop() {
     case INTERSECTION :
       //check left and right statuses
       Stop();
-      if()//bluetooth message[Intersections] = full
-      {
-        //currentState = Turn_Right()
-      }
+     // if()//bluetooth message[Intersections] = full
+//      {
+//        //currentState = Turn_Right()
+//      }
       break;
     case TURN_RIGHT :
       Turn_Right();

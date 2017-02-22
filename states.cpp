@@ -1,6 +1,7 @@
 #include"headers.h"
 #include <Adafruit_NeoPixel.h>
 int drivepwmright, drivepwmleft;
+ArmStates currentArmState;
 Servo FourbarServo;
 Servo GripperServo;
 int runs = 0;
@@ -10,10 +11,10 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_K
 
 void Interrupt_Setup()
 {
-  attachInterrupt(digitalPintoInterrupt(Front_Limit_Switch),State_to_Docked,RISING);
-  attachInterrupt(digitalPintoInterrupt(Top_Limit_Switch),State_to_Arm_Raised,RISING);
-  attachInterrupt(digitalPintoInterrupt(Middle_Limit_Switch),State_to_Arm_Straight,RISING);
-  attachInterrupt(digitalPintoInterrupt(Bottom_Limit_Switch),State_to_Arm_Down,RISING);
+  attachInterrupt(digitalPinToInterrupt(Front_Limit_Switch),State_to_Docked,RISING);
+  attachInterrupt(digitalPinToInterrupt(Top_Limit_Switch),State_to_Arm_Raised,RISING);
+  attachInterrupt(digitalPinToInterrupt(Middle_Limit_Switch),State_to_Arm_Straight,RISING);
+  attachInterrupt(digitalPinToInterrupt(Bottom_Limit_Switch),State_to_Arm_Down,RISING);
 }
 
 void Servo_Setup()
@@ -35,7 +36,7 @@ void Read_Line_Sensor()
 
   if(Left1sens>350 && Left2sens>350 && Left3sens>350 && Center_Leftsens>350 && Center_Rightsens>350 && Right3sens>350 && Right2sens>350 && Right1sens>350)
   {
-    currentState = INTERSECTION();
+    currentState = INTERSECTION;
     Intersections = Intersections+1;
   }
   //delay(50);
