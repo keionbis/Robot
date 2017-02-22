@@ -18,88 +18,88 @@ void Reactor_State_Set()
     switch(Message[i])
       {
         case 0:
-          ReactorStates[0] = EMPTY;
-          ReactorStates[2] = EMPTY;
-          ReactorStates[4] = EMPTY;
-          ReactorStates[6] = EMPTY;
+          ReactorStates[i] = EMPTY;
+          ReactorStates[i+2] = EMPTY;
+          ReactorStates[i+4] = EMPTY;
+          ReactorStates[i+6] = EMPTY;
           break;
         case 1:
-          ReactorStates[0] = FULL;
-          ReactorStates[2] = EMPTY;
-          ReactorStates[4] = EMPTY;
-          ReactorStates[6] = EMPTY;
+          ReactorStates[i] = FULL;
+          ReactorStates[i+2] = EMPTY;
+          ReactorStates[i+4] = EMPTY;
+          ReactorStates[i+6] = EMPTY;
           break;
         case 3:
-          ReactorStates[0] = FULL;
-          ReactorStates[2] = FULL;
-          ReactorStates[4] = EMPTY;
-          ReactorStates[6] = EMPTY;
+          ReactorStates[i] = FULL;
+          ReactorStates[i+2] = FULL;
+          ReactorStates[i+4] = EMPTY;
+          ReactorStates[i+6] = EMPTY;
           break;
         case 5:
-          ReactorStates[0] = FULL;
-          ReactorStates[2] = EMPTY;
-          ReactorStates[4] = FULL;
-          ReactorStates[6] = EMPTY;
+          ReactorStates[i] = FULL;
+          ReactorStates[i+2] = EMPTY;
+          ReactorStates[i+4] = FULL;
+          ReactorStates[i+6] = EMPTY;
           break;
         case 6:
-          ReactorStates[0] = EMPTY;
-          ReactorStates[2] = FULL;
-          ReactorStates[4] = FULL;
-          ReactorStates[6] = EMPTY;
+          ReactorStates[i] = EMPTY;
+          ReactorStates[i+2] = FULL;
+          ReactorStates[i+4] = FULL;
+          ReactorStates[i+6] = EMPTY;
           break;
         case 7:
-          ReactorStates[0] = FULL;
-          ReactorStates[2] = FULL;
-          ReactorStates[4] = FULL;
-          ReactorStates[6] = EMPTY;
+          ReactorStates[i] = FULL;
+          ReactorStates[i+2] = FULL;
+          ReactorStates[i+4] = FULL;
+          ReactorStates[i+6] = EMPTY;
           break;
         case 8:
-          ReactorStates[0] = EMPTY;
-          ReactorStates[2] = EMPTY;
-          ReactorStates[4] = EMPTY;
-          ReactorStates[6] = FULL;
+          ReactorStates[i] = EMPTY;
+          ReactorStates[i+2] = EMPTY;
+          ReactorStates[i+4] = EMPTY;
+          ReactorStates[i+6] = FULL;
           break;
         case 9:
-          ReactorStates[0] = FULL;
-          ReactorStates[2] = EMPTY;
-          ReactorStates[4] = EMPTY;
-          ReactorStates[6] = FULL;
+          ReactorStates[i] = FULL;
+          ReactorStates[i+2] = EMPTY;
+          ReactorStates[i+4] = EMPTY;
+          ReactorStates[i+6] = FULL;
           break;
         case 'A':
-          ReactorStates[0] = EMPTY;
-          ReactorStates[2] = FULL;
-          ReactorStates[4] = EMPTY;
-          ReactorStates[6] = FULL;
+          ReactorStates[i] = EMPTY;
+          ReactorStates[i+2] = FULL;
+          ReactorStates[i+4] = EMPTY;
+          ReactorStates[i+6] = FULL;
           break;
         case 'B':
-          ReactorStates[0] = FULL;
-          ReactorStates[2] = FULL;
-          ReactorStates[4] = EMPTY;
-          ReactorStates[6] = FULL;
+          ReactorStates[i] = FULL;
+          ReactorStates[i+2] = FULL;
+          ReactorStates[i+4] = EMPTY;
+          ReactorStates[i+6] = FULL;
           break;
         case 'C':
-          ReactorStates[0] = EMPTY;
-          ReactorStates[2] = EMPTY;
-          ReactorStates[4] = FULL;
-          ReactorStates[6] = FULL;
+          ReactorStates[i] = EMPTY;
+          ReactorStates[i+2] = EMPTY;
+          ReactorStates[i+4] = FULL;
+          ReactorStates[i+6] = FULL;
           break;
         case 'D':
-          ReactorStates[0] = FULL;
-          ReactorStates[2] = EMPTY;
-          ReactorStates[4] = FULL;
-          ReactorStates[6] = FULL;
+          ReactorStates[i] = FULL;
+          ReactorStates[i+2] = EMPTY;
+          ReactorStates[i+4] = FULL;
+          ReactorStates[i+6] = FULL;
           break;
         case 'E':
-          ReactorStates[0] = EMPTY;
-          ReactorStates[2] = FULL;
-          ReactorStates[4] = FULL;
-          ReactorStates[6] = FULL;
+          ReactorStates[i] = EMPTY;
+          ReactorStates[i+2] = FULL;
+          ReactorStates[i+4] = FULL;
+          ReactorStates[i+6] = FULL;
           break;
         case 'F':
-          ReactorStates[0] = FULL;
-          ReactorStates[2] = FULL;
-          ReactorStates[4] = FULL;
-          ReactorStates[6] = FULL;
+          ReactorStates[i] = FULL;
+          ReactorStates[i+2] = FULL;
+          ReactorStates[i+4] = FULL;
+          ReactorStates[i+6] = FULL;
           break;
         default:
           Serial.println("I Dont know what the fuck you just did but it didnt make sense");
