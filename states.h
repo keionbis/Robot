@@ -1,24 +1,21 @@
 #ifndef STATES_H
 #define STATES_H
 //*****************************State Definitions****************************//
-typedef enum DriveStates {
-    LINE_FOLLOW = 0, // Only one solid centered line to follow
-    INTERSECTION = 1, // Come to an intersection
-    TURN_RIGHT = 2,  // turning to the right slot
-    TURN_LEFT = 3,  // turning to the left slot
-    DOCKED = 4,  // Docked at the base of the rods
-    REMOVE_ROD = 5, //load rod into gripper
-    PLACE_ROD = 6, // Load rod from gripper into reactor
-    REVERSE = 7, // line follow in reverse until the center line is found
-    STOP = 8, //stop all motors
-    GRIPPER_STRAIGHT = 9 // the gripper is at the end of its linear path.
 
+typedef enum DriveStates {
+    LINE_FOLLOW , // Only one solid centered line to follow
+    INTERSECTION , // Come to an intersection
+    TURN_RIGHT,  // turning to the right slot
+    TURN_LEFT,  // turning to the left slot
+    DOCKED,  // Docked at the base of the rods
+    REMOVE_ROD, //load rod into gripper
+    PLACE_ROD, // Load rod from gripper into reactor
+    REVERSE, // line follow in reverse until the center line is found
+    STOP, //stop all motors
+    GRIPPER_STRAIGHT // the gripper is at the end of its linear path.
 };
-typedef enum ArmStates{
-  ARM_LIFTED = 1, // upper limit switch triggered
-  ARM_STRAIGHT_OUT = 2,// arm at the end of its linear travel
-  ARM_LOWERED = 3// Lower limit switched triggered
-};
+extern DriveStates currentState;
+//extern int currentState;
 typedef enum DriveSide {
   LEFT = 5, //Pin numbers
   RIGHT = 2
@@ -28,6 +25,9 @@ typedef enum DriveDirection {
   FORWARD = 1,
   BACKWARD = 0
 };
+//*****************************Variable Definitions****************************//
+extern Servo FourbarServo;
+extern Servo GripperServo;
 
 //*****************************Function Definitions****************************//
 void Line_Follow();
@@ -41,7 +41,7 @@ void Reverse();
 void Led_Empty();
 void Led_Loaded();
 void Stop();
-void Arm_State();
+void Servo_Setup();
 //***************************************************************************//
 #define LEFT_REVERSED 1
 #define RIGHT_REVERSED 0
@@ -61,6 +61,7 @@ static void initDrivePWM() {
     OCR3B = 0; //default to off
 
 }
+
 static void setDrivePWM(unsigned int duty_cycle, DriveSide side,DriveDirection newDir) {
   //Sets the new PWM duty cycle; duty cycle scaled from 0 to 65535 for 0 - 100 percent
   constrain(duty_cycle,0,65535);
@@ -101,4 +102,5 @@ static void setDrivePWM(unsigned int duty_cycle, DriveSide side,DriveDirection n
     }
   }
 }
+
 #endif

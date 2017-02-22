@@ -1,4 +1,4 @@
-Z˛
+#ifndef HEADERS_H
 #define HEADERS_H
 
 #include <Arduino.h>
@@ -6,5 +6,7 @@ Z˛
 #include<Servo.h>
 #include "states.h"
 #include <Adafruit_NeoPixel.h>
+#include "BTComms.h"
+#include "Messages.h"
 
 #endif
