@@ -18,30 +18,47 @@ void loop() {
       Line_Follow();
       break;
     case INTERSECTION :
-      //check left and right statuses
       Stop();
-        switch(ReactorStates[Intersections])
+        switch(ReactorStates[Intersections-1])
         {
           case FULL:
+            Turn_Right();
+            while(currentState!= DOCKED)
+            {
+            Line_Follow();
+            }
+            Stop();
+            Lift_Fourbar();
+            Open_Gripper();
+            Close_Gripper();
+            Reverse();
+            Turn_Right();
             break;
           case EMPTY:
             break;
         }
-      break;
-    case TURN_RIGHT :
-      Turn_Right();
-      break;
-    case TURN_LEFT:
-      Turn_Left();
+        switch(ReactorStates[Intersections])
+        {
+          case FULL:
+          Turn_Left();
+          while(currentState!= DOCKED)
+          {
+          Line_Follow();
+          }
+          Stop();
+          Lift_Fourbar();
+          Open_Gripper();
+          Close_Gripper();
+          Reverse();
+          Turn_Left();
+          break;
+          case EMPTY:
+            break;
+        }
+      currentState = LINE_FOLLOW;
       break;
     case DOCKED:
       Stop();
-      break;
-    case REMOVE_ROD:
-      break;
-    case PLACE_ROD:
-      break;
-    case REVERSE:
       break;
     case STOP:
       Stop();

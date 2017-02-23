@@ -6,7 +6,8 @@ Servo FourbarServo;
 Servo GripperServo;
 int runs = 0;
 int pos;
-int Intersections;
+int Intersections = -1;
+int Left1sens, Left2sens, Left3sens, Center_Leftsens, Center_Rightsens, Right3sens, Right2sens, Right1sens;
 Intersection_States ReactorStates[8];
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
 
@@ -125,19 +126,22 @@ void Servo_Setup()
 
 void Read_Line_Sensor()
 {
-  int Left1sens = analogRead(Left1);
-  int Left2sens = analogRead(Left2);
-  int Left3sens = analogRead(Left3);
-  int Center_Leftsens = analogRead(Center_Left);
-  int Center_Rightsens = analogRead(Center_Right);
-  int Right3sens = analogRead(Right3);
-  int Right2sens =analogRead(Right2);
-  int Right1sens =analogRead(Right1);
-
+   Left1sens = analogRead(Left1);
+   Left2sens = analogRead(Left2);
+   Left3sens = analogRead(Left3);
+   Center_Leftsens = analogRead(Center_Left);
+   Center_Rightsens = analogRead(Center_Right);
+   Right3sens = analogRead(Right3);
+   Right2sens =analogRead(Right2);
+   Right1sens =analogRead(Right1);
+}
+void Enter_Intersection_State()
+{
+  Read_Line_Sensor();
   if(Left1sens>350 && Left2sens>350 && Left3sens>350 && Center_Leftsens>350 && Center_Rightsens>350 && Right3sens>350 && Right2sens>350 && Right1sens>350)
   {
     currentState = INTERSECTION;
-    Intersections = Intersections+1;
+    Intersections = Intersections+2;
   }
   //delay(50);
 }
@@ -145,8 +149,8 @@ void Read_Line_Sensor()
 void Line_Follow()
 {
     Read_Line_Sensor();
-    drivepwmleft = map(analogRead(2),35,1024,35000,10000);
-    drivepwmright = map(analogRead(7),35,1024,35000,10000);
+    drivepwmleft = map(analogRead(2),35,1024,27500,10000);
+    drivepwmright = map(analogRead(7),35,1024,27500,10000);
     setDrivePWM(drivepwmleft, LEFT, FORWARD);
     setDrivePWM(drivepwmright, RIGHT, FORWARD);
 }
@@ -167,12 +171,10 @@ void Turn_Left()
 
 void Lift_Fourbar()
 {
-  if(runs != 1)
-  {
-    FourbarServo.write(22);
+  pos = 22;
+    FourbarServo.write(pos);
     runs = 1;
-  }
-  if(currentArmState != ARMRAISED){
+  while(currentArmState != ARMRAISED){
   pos = pos-1;
   FourbarServo.write(pos);
   }
@@ -180,16 +182,28 @@ void Lift_Fourbar()
 
 void Lower_Fourbar()
 {
-  if(runs != 1)
-  {
-    FourbarServo.write(129);
+  pos = 129;
+    FourbarServo.write(pos);
     runs = 1;
-  }
-  if(currentArmState != ARMLOWERED){
+  while(currentArmState != ARMLOWERED){
   pos = pos+1;
   FourbarServo.write(pos);
 
   }
+
+}
+void Extend_Fourbar()
+{
+
+  Lift_Fourbar();
+  pos = 55;
+  FourbarServo.write(pos);
+  while(currentArmState != ARMSTRAIGHT)
+  {
+    pos = pos+1;
+    FourbarServo.write(pos);
+  }
+
 
 }
 
@@ -205,10 +219,17 @@ void Close_Gripper()
 
 void Reverse()
 {
-    drivepwmleft = map(analogRead(2),35,1024,10000,35000);
-    drivepwmright = map(analogRead(7),35,1024,10000,35000);
+  Read_Line_Sensor();
+  while(Left1sens<350 && Left2sens<350 && Left3sens<350 && Center_Leftsens<350 && Center_Rightsens<350 && Right3sens<350 && Right2sens<350 && Right1sens<350)
+    {
+    drivepwmleft = map(analogRead(2),35,1024,15000,27500);
+    drivepwmright = map(analogRead(7),35,1024,15000,27500);
     setDrivePWM(drivepwmleft, LEFT, BACKWARD);
     setDrivePWM(drivepwmright, RIGHT, BACKWARD);
+    }
+    setDrivePWM(35000, LEFT, FORWARD);
+    setDrivePWM(35000, RIGHT, FORWARD);
+    delay(15);
 }
 
 void Led_Empty()

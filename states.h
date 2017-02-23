@@ -5,12 +5,7 @@
 typedef enum DriveStates {
     LINE_FOLLOW , // Only one solid centered line to follow
     INTERSECTION , // Come to an intersection
-    TURN_RIGHT,  // turning to the right slot
-    TURN_LEFT,  // turning to the left slot
     DOCKED,  // Docked at the base of the rods
-    REMOVE_ROD, //load rod into gripper
-    PLACE_ROD, // Load rod from gripper into reactor
-    REVERSE, // line follow in reverse until the center line is found
     STOP //stop all motors
 
 };
@@ -36,13 +31,14 @@ typedef enum Intersection_States{
   EMPTY
 };
 //*****************************Variable Definitions****************************//
-extern Servo FourbarServo;
-extern Servo GripperServo;
 extern DriveStates currentState;
 extern ArmStates currentArmState;
-extern Intersection_States IntersectionState;
-extern int Intersections;
 extern Intersection_States ReactorStates[8];
+extern Intersection_States IntersectionState;
+extern Servo FourbarServo;
+extern Servo GripperServo;
+extern int Intersections;
+extern int Left1sens, Left2sens, Left3sens, Center_Leftsens, Center_Rightsens, Right3sens, Right2sens, Right1sens;
 //extern Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
 //*****************************Function Definitions****************************//
 void Line_Follow();
@@ -64,6 +60,7 @@ void State_to_Arm_Straight();
 void State_to_Arm_Raised();
 void State_to_Docked();
 void Reactor_State_Set();
+void Enter_Intersection_State();
 //***************************************************************************//
 #define LEFT_REVERSED 1
 #define RIGHT_REVERSED 0
