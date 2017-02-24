@@ -2,7 +2,8 @@
 Messages msg;
 unsigned long timeForHeartbeat;
 void BT_setup(){
-msg.setup();
+  comms.setup();
+  msg.setup();
   timeForHeartbeat = millis() + 1000;
 }
 
@@ -20,4 +21,3 @@ void Send_HeartBeat()
     msg.sendHeartbeat();
   }
 }
-

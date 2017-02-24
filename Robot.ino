@@ -2,18 +2,24 @@
  DriveStates currentState;
 
 void setup() {
-  Servo_Setup();
-  initDrivePWM();
   BT_setup();
+  while (!Serial3.available()) {
+    delay(50);
+  }
   BT_Data();
   Interrupt_Setup();
-
+  Servo_Setup();
+  initDrivePWM();
 }
 
 void loop() {
   Read_Line_Sensor();
   Send_HeartBeat();
+  Start_Stop_Message();
   switch (currentState){
+    case STANDBY:
+      Standby();
+      break;
     case LINE_FOLLOW :
       Line_Follow();
       break;
@@ -25,7 +31,7 @@ void loop() {
             Turn_Right();
             while(currentState!= DOCKED)
             {
-            Line_Follow();
+              Line_Follow();
             }
             Stop();
             Lift_Fourbar();
@@ -40,25 +46,24 @@ void loop() {
         switch(ReactorStates[Intersections])
         {
           case FULL:
-          Turn_Left();
-          while(currentState!= DOCKED)
-          {
-          Line_Follow();
-          }
-          Stop();
-          Lift_Fourbar();
-          Open_Gripper();
-          Close_Gripper();
-          Reverse();
-          Turn_Left();
-          break;
+            Turn_Left();
+            while(currentState!= DOCKED)
+            {
+            Line_Follow();
+            }
+            Stop();
+            Lift_Fourbar();
+            Open_Gripper();
+            Close_Gripper();
+            Reverse();
+            Turn_Left();
+            break;
           case EMPTY:
             break;
         }
       currentState = LINE_FOLLOW;
       break;
     case DOCKED:
-      Stop();
       break;
     case STOP:
       Stop();

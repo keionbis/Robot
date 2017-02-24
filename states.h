@@ -3,6 +3,7 @@
 //*****************************State Definitions****************************//
 
 typedef enum DriveStates {
+    STANDBY,  // Robot will sit and wait patiently
     LINE_FOLLOW , // Only one solid centered line to follow
     INTERSECTION , // Come to an intersection
     DOCKED,  // Docked at the base of the rods
@@ -39,6 +40,7 @@ extern Servo FourbarServo;
 extern Servo GripperServo;
 extern int Intersections;
 extern int Left1sens, Left2sens, Left3sens, Center_Leftsens, Center_Rightsens, Right3sens, Right2sens, Right1sens;
+extern unsigned long timeForHeartbeat;
 //extern Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
 //*****************************Function Definitions****************************//
 void Line_Follow();
@@ -61,6 +63,8 @@ void State_to_Arm_Raised();
 void State_to_Docked();
 void Reactor_State_Set();
 void Enter_Intersection_State();
+void Standby();
+void Start_Stop_Message();
 //***************************************************************************//
 #define LEFT_REVERSED 1
 #define RIGHT_REVERSED 0

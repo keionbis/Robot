@@ -109,7 +109,10 @@ void Reactor_State_Set()
     }
 }
 
-
+void S tandby()
+{
+  delay(50);
+}
 void Interrupt_Setup()
 {
   attachInterrupt(digitalPinToInterrupt(Front_Limit_Switch),State_to_Docked,RISING);
@@ -265,4 +268,11 @@ void State_to_Arm_Straight()
 void State_to_Arm_Down()
 {
   currentArmState = ARMLOWERED;
+}
+void Start_Stop_Message()
+{
+  if((coms.getMessageByte(1), HEX)==1)
+  {
+    currentState = LINE_FOLLOW;
+  }
 }
