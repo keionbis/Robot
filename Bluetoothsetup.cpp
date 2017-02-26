@@ -1,6 +1,7 @@
 #include"headers.h"
 Messages msg;
 unsigned long timeForHeartbeat;
+int loops = 0;
 void BT_setup(){
   comms.setup();
   msg.setup();
@@ -9,9 +10,12 @@ void BT_setup(){
 
 void BT_Data()
 {
-  if (msg.read()) {
-    msg.Store_Message();
+
+     while(msg.read()) {
+     msg.printMessage();
+    //msg.printMessage();
   }
+
 }
 
 void Send_HeartBeat()

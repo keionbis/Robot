@@ -33,6 +33,7 @@ typedef enum Intersection_States{
 };
 //*****************************Variable Definitions****************************//
 extern DriveStates currentState;
+extern DriveStates prevState;
 extern ArmStates currentArmState;
 extern Intersection_States ReactorStates[8];
 extern Intersection_States IntersectionState;

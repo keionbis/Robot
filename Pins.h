@@ -20,10 +20,10 @@
 #define Right2 6
 #define Right1 5
 
-#define Front_Limit_Switch 2
-#define Bottom_Limit_Switch 3
-#define Middle_Limit_Switch 18
-#define Top_Limit_Switch 19
+#define Front_Limit_Switch 3
+#define Bottom_Limit_Switch 18
+#define Middle_Limit_Switch 19
+#define Top_Limit_Switch 20
 
 #define Upper_Servo_pos 22
 #define Lower_Servo_pos 120

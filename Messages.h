@@ -23,6 +23,7 @@ public:
 private:
 	bool stopped;
 };
-extern int Message[2];
+extern int Message;
+extern int loops;
 
 #endif

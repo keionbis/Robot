@@ -2,6 +2,7 @@
 #include <Adafruit_NeoPixel.h>
 int drivepwmright, drivepwmleft;
 ArmStates currentArmState;
+DriveStates prevState;
 Servo FourbarServo;
 Servo GripperServo;
 int runs = 0;
@@ -14,102 +15,118 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_K
 
 void Reactor_State_Set()
 {
-  for(int i = 0;i<2;i++)
-    {
-    switch(Message[i])
-      {
-        case 0:
-          ReactorStates[i] = EMPTY;
-          ReactorStates[i+2] = EMPTY;
-          ReactorStates[i+4] = EMPTY;
-          ReactorStates[i+6] = EMPTY;
-          break;
-        case 1:
-          ReactorStates[i] = FULL;
-          ReactorStates[i+2] = EMPTY;
-          ReactorStates[i+4] = EMPTY;
-          ReactorStates[i+6] = EMPTY;
-          break;
-        case 3:
-          ReactorStates[i] = FULL;
-          ReactorStates[i+2] = FULL;
-          ReactorStates[i+4] = EMPTY;
-          ReactorStates[i+6] = EMPTY;
-          break;
-        case 5:
-          ReactorStates[i] = FULL;
-          ReactorStates[i+2] = EMPTY;
-          ReactorStates[i+4] = FULL;
-          ReactorStates[i+6] = EMPTY;
-          break;
-        case 6:
-          ReactorStates[i] = EMPTY;
-          ReactorStates[i+2] = FULL;
-          ReactorStates[i+4] = FULL;
-          ReactorStates[i+6] = EMPTY;
-          break;
-        case 7:
-          ReactorStates[i] = FULL;
-          ReactorStates[i+2] = FULL;
-          ReactorStates[i+4] = FULL;
-          ReactorStates[i+6] = EMPTY;
-          break;
-        case 8:
-          ReactorStates[i] = EMPTY;
-          ReactorStates[i+2] = EMPTY;
-          ReactorStates[i+4] = EMPTY;
-          ReactorStates[i+6] = FULL;
-          break;
-        case 9:
-          ReactorStates[i] = FULL;
-          ReactorStates[i+2] = EMPTY;
-          ReactorStates[i+4] = EMPTY;
-          ReactorStates[i+6] = FULL;
-          break;
-        case 'A':
-          ReactorStates[i] = EMPTY;
-          ReactorStates[i+2] = FULL;
-          ReactorStates[i+4] = EMPTY;
-          ReactorStates[i+6] = FULL;
-          break;
-        case 'B':
-          ReactorStates[i] = FULL;
-          ReactorStates[i+2] = FULL;
-          ReactorStates[i+4] = EMPTY;
-          ReactorStates[i+6] = FULL;
-          break;
-        case 'C':
-          ReactorStates[i] = EMPTY;
-          ReactorStates[i+2] = EMPTY;
-          ReactorStates[i+4] = FULL;
-          ReactorStates[i+6] = FULL;
-          break;
-        case 'D':
-          ReactorStates[i] = FULL;
-          ReactorStates[i+2] = EMPTY;
-          ReactorStates[i+4] = FULL;
-          ReactorStates[i+6] = FULL;
-          break;
-        case 'E':
-          ReactorStates[i] = EMPTY;
-          ReactorStates[i+2] = FULL;
-          ReactorStates[i+4] = FULL;
-          ReactorStates[i+6] = FULL;
-          break;
-        case 'F':
-          ReactorStates[i] = FULL;
-          ReactorStates[i+2] = FULL;
-          ReactorStates[i+4] = FULL;
-          ReactorStates[i+6] = FULL;
-          break;
-        default:
-          Serial.println("I Dont know what the fuck you just did but it didnt make sense");
-          break;
-      }
-    }
+  int i = loops;
+  //Serial.println(Message);
+//    switch(Message,HEX)
+//      {
+//        case 0:
+//          Serial.println("0");
+//          ReactorStates[i] = EMPTY;
+//          ReactorStates[i+2] = EMPTY;
+//          ReactorStates[i+4] = EMPTY;
+//          ReactorStates[i+6] = EMPTY;
+//          break;
+//        case 1:
+//          Serial.println("1");
+//          ReactorStates[i] = FULL;
+//          ReactorStates[i+2] = EMPTY;
+//          ReactorStates[i+4] = EMPTY;
+//          ReactorStates[i+6] = EMPTY;
+//          break;
+//        case 3:
+//          Serial.println("3");
+//          ReactorStates[i] = FULL;
+//          ReactorStates[i+2] = FULL;
+//          ReactorStates[i+4] = EMPTY;
+//          ReactorStates[i+6] = EMPTY;
+//          break;
+//        case 5:
+//         Serial.println("5");
+//          ReactorStates[i] = FULL;
+//          ReactorStates[i+2] = EMPTY;
+//          ReactorStates[i+4] = FULL;
+//          ReactorStates[i+6] = EMPTY;
+//          break;
+//        case 6:
+//           Serial.println("6");
+//          ReactorStates[i] = EMPTY;
+//          ReactorStates[i+2] = FULL;
+//          ReactorStates[i+4] = FULL;
+//          ReactorStates[i+6] = EMPTY;
+//          break;
+//        case 7:
+//          Serial.println("7");
+//          ReactorStates[i] = FULL;
+//          ReactorStates[i+2] = FULL;
+//          ReactorStates[i+4] = FULL;
+//          ReactorStates[i+6] = EMPTY;
+//          break;
+//        
+//        case 8:
+//          Serial.println("8");
+//          ReactorStates[i] = EMPTY;
+//          ReactorStates[i+2] = EMPTY;
+//          ReactorStates[i+4] = EMPTY;
+//          ReactorStates[i+6] = FULL;
+//          break;
+//        case 9:
+//          Serial.println("9");
+//          ReactorStates[i] = FULL;
+//          ReactorStates[i+2] = EMPTY;
+//          ReactorStates[i+4] = EMPTY;
+//          ReactorStates[i+6] = FULL;
+//          break;
+//        case 10:
+//          Serial.println("A");
+//          ReactorStates[i] = EMPTY;
+//          ReactorStates[i+2] = FULL;
+//          ReactorStates[i+4] = EMPTY;
+//          ReactorStates[i+6] = FULL;
+//          break;
+//        case 11:
+//          Serial.println("B");
+//          ReactorStates[i] = FULL;
+//          ReactorStates[i+2] = FULL;
+//          ReactorStates[i+4] = EMPTY;
+//          ReactorStates[i+6] = FULL;
+//          break;
+//        case 12:
+//          Serial.println("C");
+//          ReactorStates[i] = EMPTY;
+//          ReactorStates[i+2] = EMPTY;
+//          ReactorStates[i+4] = FULL;
+//          ReactorStates[i+6] = FULL;
+//          break;
+//        case 13:
+//          Serial.println("D");
+//          ReactorStates[i] = FULL;
+//          ReactorStates[i+2] = EMPTY;
+//          ReactorStates[i+4] = FULL;
+//          ReactorStates[i+6] = FULL;
+//          break;
+//        case 14:
+//          Serial.println("E");
+//          ReactorStates[i] = EMPTY;
+//          ReactorStates[i+2] = FULL;
+//          ReactorStates[i+4] = FULL;
+//          ReactorStates[i+6] = FULL;
+//          break;
+//        case 15:
+//          Serial.println("F");
+//          ReactorStates[i] = FULL;
+//          ReactorStates[i+2] = FULL;
+//          ReactorStates[i+4] = FULL;
+//          ReactorStates[i+6] = FULL;
+//          break;
+//        default:
+//          Serial.println("I Dont know what the fuck you just did but it didnt make sense");
+//          break;
+//      }
+     
+      
 }
 
-void S tandby()
+void Standby()
 {
   delay(50);
 }
@@ -138,10 +155,20 @@ void Read_Line_Sensor()
    Right2sens =analogRead(Right2);
    Right1sens =analogRead(Right1);
 }
+int Check_Line_States()
+{
+   if(Left1sens>350 && Left2sens>350 && Left3sens>350 && Center_Leftsens>350 && Center_Rightsens>350 && Right3sens>350 && Right2sens>350 && Right1sens>350)
+   {
+    return 1;
+   }
+   else{
+   return 0;
+   }
+}
 void Enter_Intersection_State()
 {
   Read_Line_Sensor();
-  if(Left1sens>350 && Left2sens>350 && Left3sens>350 && Center_Leftsens>350 && Center_Rightsens>350 && Right3sens>350 && Right2sens>350 && Right1sens>350)
+  if(Check_Line_States() == 1)
   {
     currentState = INTERSECTION;
     Intersections = Intersections+2;
@@ -154,8 +181,10 @@ void Line_Follow()
     Read_Line_Sensor();
     drivepwmleft = map(analogRead(2),35,1024,27500,10000);
     drivepwmright = map(analogRead(7),35,1024,27500,10000);
+    Serial.println(drivepwmleft);
     setDrivePWM(drivepwmleft, LEFT, FORWARD);
     setDrivePWM(drivepwmright, RIGHT, FORWARD);
+    Enter_Intersection_State();
 }
 
 void Turn_Right()
@@ -174,9 +203,6 @@ void Turn_Left()
 
 void Lift_Fourbar()
 {
-  pos = 22;
-    FourbarServo.write(pos);
-    runs = 1;
   while(currentArmState != ARMRAISED){
   pos = pos-1;
   FourbarServo.write(pos);
@@ -185,9 +211,6 @@ void Lift_Fourbar()
 
 void Lower_Fourbar()
 {
-  pos = 129;
-    FourbarServo.write(pos);
-    runs = 1;
   while(currentArmState != ARMLOWERED){
   pos = pos+1;
   FourbarServo.write(pos);
@@ -199,8 +222,6 @@ void Extend_Fourbar()
 {
 
   Lift_Fourbar();
-  pos = 55;
-  FourbarServo.write(pos);
   while(currentArmState != ARMSTRAIGHT)
   {
     pos = pos+1;
@@ -271,8 +292,14 @@ void State_to_Arm_Down()
 }
 void Start_Stop_Message()
 {
-  if((coms.getMessageByte(1), HEX)==1)
+  if((comms.getMessageByte(0))==4)
   {
-    currentState = LINE_FOLLOW;
+    prevState = currentState;
+    currentState = STOP;
   }
+  if((comms.getMessageByte(0))==4)
+  {
+    currentState = prevState;
+  }
+  
 }

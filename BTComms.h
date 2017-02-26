@@ -18,5 +18,6 @@ class BTComms {
 void BT_setup();
 void BT_Data();
 void Send_HeartBeat();
+extern BTComms comms;
 
 #endif
