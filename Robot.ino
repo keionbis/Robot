@@ -3,12 +3,13 @@
 
 void setup() {
   Serial.begin(115200);
+  Wire.begin();
   //Serial.println("SETUP");
   BT_setup();
   //printMessage();
-  while (!Serial3.available()) {
-    delay(50);
-  }
+  //while (!Serial3.available()) {
+    //delay(50);
+  //}
   BT_Data();
 //  for (int i = 0;i<8;i++){
 //  Serial.println(ReactorStates[i]);
@@ -20,6 +21,14 @@ void setup() {
   //Serial.println("END SERVO SETUP");
   initDrivePWM();
   //Serial.println("END Insitdrive");
+  Turn_Left();
+  delay(500);
+  Stop();
+  Serial.println("LEFT");
+  Turn_Right();
+  delay(500);
+  Serial.println("RIGHT");
+  Stop();
 }
 
 void loop() {
@@ -46,48 +55,45 @@ void loop() {
       setDrivePWM( 65535, RIGHT,FORWARD);
       }
       Stop();
-      
-      
-//        switch(ReactorStates[Intersections-1])
-//        {
-//          case FULL:
-//            Turn_Right();
-//            while(currentState!= DOCKED)
-//            {
-//              Line_Follow();
-//            }
-//            Stop();
-//            Lift_Fourbar();
-//            Open_Gripper();
-//            Close_Gripper();
-//            Reverse();
-//            Turn_Right();
-//            break;
-//          case EMPTY:
-//            break;
-//        }
-//        switch(ReactorStates[Intersections])
-//        {
-//          case FULL:
-//            Turn_Left();
-//            while(currentState!= DOCKED)
-//            {
-//            Line_Follow();
-//            }
-//            Stop();
-//            Lift_Fourbar();
-//            Open_Gripper();
-//            Close_Gripper();
-//            Reverse();
-//            Turn_Left();
-//            break;
-//          case EMPTY:
-//            break;
-       // }
+      switch(ReactorStates[Intersections-1])
+        {
+          case FULL:
+            Turn_Right();
+            while(currentState!= DOCKED)
+            {
+              Line_Follow();
+            }
+            Stop();
+            Lift_Fourbar();
+            Open_Gripper();
+            Close_Gripper();
+            Reverse();
+            Turn_Right();
+            break;
+          case EMPTY:
+            break;
+        }
+      switch(ReactorStates[Intersections])
+        {
+          case FULL:
+            Turn_Left();
+            while(currentState!= DOCKED)
+            {
+            Line_Follow();
+            }
+            Stop();
+            Lift_Fourbar();
+            Open_Gripper();
+            Close_Gripper();
+            Reverse();
+            Turn_Left();
+            break;
+          case EMPTY:
+            break;
+        }
       break;
     case DOCKED:
       Serial.println("DOCKED");
-      
       break;
     case STOP:
     Serial.println("STOP");

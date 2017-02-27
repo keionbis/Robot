@@ -17,6 +17,11 @@ typedef enum DriveSide {
   RIGHT = 2
 };
 
+typedef enum TurnDirection {
+  Left,
+  Right
+};
+
 typedef enum DriveDirection {
   FORWARD = 1,
   BACKWARD = 0
@@ -33,6 +38,7 @@ typedef enum Intersection_States{
 };
 //*****************************Variable Definitions****************************//
 extern DriveStates currentState;
+extern TurnDirection TurnDir;
 extern DriveStates prevState;
 extern ArmStates currentArmState;
 extern Intersection_States ReactorStates[8];
@@ -66,6 +72,7 @@ void Reactor_State_Set();
 void Enter_Intersection_State();
 void Standby();
 void Start_Stop_Message();
+void Extend_Fourbar();
 //***************************************************************************//
 #define LEFT_REVERSED 1
 #define RIGHT_REVERSED 0

@@ -12,120 +12,6 @@ int Left1sens, Left2sens, Left3sens, Center_Leftsens, Center_Rightsens, Right3se
 Intersection_States ReactorStates[8];
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
 
-
-void Reactor_State_Set()
-{
-  int i = loops;
-  //Serial.println(Message);
-//    switch(Message,HEX)
-//      {
-//        case 0:
-//          Serial.println("0");
-//          ReactorStates[i] = EMPTY;
-//          ReactorStates[i+2] = EMPTY;
-//          ReactorStates[i+4] = EMPTY;
-//          ReactorStates[i+6] = EMPTY;
-//          break;
-//        case 1:
-//          Serial.println("1");
-//          ReactorStates[i] = FULL;
-//          ReactorStates[i+2] = EMPTY;
-//          ReactorStates[i+4] = EMPTY;
-//          ReactorStates[i+6] = EMPTY;
-//          break;
-//        case 3:
-//          Serial.println("3");
-//          ReactorStates[i] = FULL;
-//          ReactorStates[i+2] = FULL;
-//          ReactorStates[i+4] = EMPTY;
-//          ReactorStates[i+6] = EMPTY;
-//          break;
-//        case 5:
-//         Serial.println("5");
-//          ReactorStates[i] = FULL;
-//          ReactorStates[i+2] = EMPTY;
-//          ReactorStates[i+4] = FULL;
-//          ReactorStates[i+6] = EMPTY;
-//          break;
-//        case 6:
-//           Serial.println("6");
-//          ReactorStates[i] = EMPTY;
-//          ReactorStates[i+2] = FULL;
-//          ReactorStates[i+4] = FULL;
-//          ReactorStates[i+6] = EMPTY;
-//          break;
-//        case 7:
-//          Serial.println("7");
-//          ReactorStates[i] = FULL;
-//          ReactorStates[i+2] = FULL;
-//          ReactorStates[i+4] = FULL;
-//          ReactorStates[i+6] = EMPTY;
-//          break;
-//        
-//        case 8:
-//          Serial.println("8");
-//          ReactorStates[i] = EMPTY;
-//          ReactorStates[i+2] = EMPTY;
-//          ReactorStates[i+4] = EMPTY;
-//          ReactorStates[i+6] = FULL;
-//          break;
-//        case 9:
-//          Serial.println("9");
-//          ReactorStates[i] = FULL;
-//          ReactorStates[i+2] = EMPTY;
-//          ReactorStates[i+4] = EMPTY;
-//          ReactorStates[i+6] = FULL;
-//          break;
-//        case 10:
-//          Serial.println("A");
-//          ReactorStates[i] = EMPTY;
-//          ReactorStates[i+2] = FULL;
-//          ReactorStates[i+4] = EMPTY;
-//          ReactorStates[i+6] = FULL;
-//          break;
-//        case 11:
-//          Serial.println("B");
-//          ReactorStates[i] = FULL;
-//          ReactorStates[i+2] = FULL;
-//          ReactorStates[i+4] = EMPTY;
-//          ReactorStates[i+6] = FULL;
-//          break;
-//        case 12:
-//          Serial.println("C");
-//          ReactorStates[i] = EMPTY;
-//          ReactorStates[i+2] = EMPTY;
-//          ReactorStates[i+4] = FULL;
-//          ReactorStates[i+6] = FULL;
-//          break;
-//        case 13:
-//          Serial.println("D");
-//          ReactorStates[i] = FULL;
-//          ReactorStates[i+2] = EMPTY;
-//          ReactorStates[i+4] = FULL;
-//          ReactorStates[i+6] = FULL;
-//          break;
-//        case 14:
-//          Serial.println("E");
-//          ReactorStates[i] = EMPTY;
-//          ReactorStates[i+2] = FULL;
-//          ReactorStates[i+4] = FULL;
-//          ReactorStates[i+6] = FULL;
-//          break;
-//        case 15:
-//          Serial.println("F");
-//          ReactorStates[i] = FULL;
-//          ReactorStates[i+2] = FULL;
-//          ReactorStates[i+4] = FULL;
-//          ReactorStates[i+6] = FULL;
-//          break;
-//        default:
-//          Serial.println("I Dont know what the fuck you just did but it didnt make sense");
-//          break;
-//      }
-     
-      
-}
-
 void Standby()
 {
   delay(50);
@@ -189,16 +75,17 @@ void Line_Follow()
 
 void Turn_Right()
 {
-    setDrivePWM(32767, LEFT, FORWARD);
-    setDrivePWM(32767, RIGHT, BACKWARD);
-    delay(75);
+
+    setDrivePWM(65525, LEFT, FORWARD);
+    setDrivePWM(65525, RIGHT, BACKWARD);
+    delay(375);
 }
 
 void Turn_Left()
 {
-   setDrivePWM(32767, LEFT, BACKWARD);
-   setDrivePWM(32767, RIGHT, FORWARD);
-   delay(75);
+   setDrivePWM(65525, LEFT, BACKWARD);
+   setDrivePWM(65525, RIGHT, FORWARD);
+   delay(375);
 }
 
 void Lift_Fourbar()
@@ -206,6 +93,7 @@ void Lift_Fourbar()
   while(currentArmState != ARMRAISED){
   pos = pos-1;
   FourbarServo.write(pos);
+  delay(10);
   }
 }
 
@@ -214,6 +102,7 @@ void Lower_Fourbar()
   while(currentArmState != ARMLOWERED){
   pos = pos+1;
   FourbarServo.write(pos);
+  delay(10);
 
   }
 
@@ -226,6 +115,7 @@ void Extend_Fourbar()
   {
     pos = pos+1;
     FourbarServo.write(pos);
+    delay(10);
   }
 
 
@@ -277,6 +167,7 @@ void State_to_Docked()
 {
   currentState = DOCKED;
 }
+
 void State_to_Arm_Raised()
 {
   currentArmState = ARMRAISED;
@@ -286,10 +177,13 @@ void State_to_Arm_Straight()
 {
   currentArmState = ARMSTRAIGHT;
 }
+
 void State_to_Arm_Down()
 {
   currentArmState = ARMLOWERED;
 }
+
+
 void Start_Stop_Message()
 {
   if((comms.getMessageByte(0))==4)
