@@ -75,10 +75,8 @@ void Line_Follow()
 
 void Turn_Right()
 {
-
     setDrivePWM(65525, LEFT, FORWARD);
     setDrivePWM(65525, RIGHT, BACKWARD);
-    delay(375);
 }
 
 void Turn_Left()

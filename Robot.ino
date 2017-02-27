@@ -21,13 +21,8 @@ void setup() {
   //Serial.println("END SERVO SETUP");
   initDrivePWM();
   //Serial.println("END Insitdrive");
-  Turn_Left();
-  delay(500);
-  Stop();
-  Serial.println("LEFT");
-  Turn_Right();
-  delay(500);
-  Serial.println("RIGHT");
+  //Turn_Right();
+  //delay(500);
   Stop();
 }
 
@@ -41,24 +36,17 @@ void loop() {
       Serial.println("STANDBY");
       break;
     case LINE_FOLLOW :
-      //Line_Follow();
+      Line_Follow();
       Serial.println("LINEFOLLOW");
       break;
     case INTERSECTION :
       Stop();
       currentState = LINE_FOLLOW;
       Serial.println("INTERSECTION");
-      delay(5000);
-      while(Enter_Intersection_State);
-      {
-      setDrivePWM( 65535, LEFT,FORWARD);
-      setDrivePWM( 65535, RIGHT,FORWARD);
-      }
-      Stop();
       switch(ReactorStates[Intersections-1])
         {
           case FULL:
-            Turn_Right();
+            turn90(Right);
             while(currentState!= DOCKED)
             {
               Line_Follow();
@@ -68,7 +56,7 @@ void loop() {
             Open_Gripper();
             Close_Gripper();
             Reverse();
-            Turn_Right();
+            turn90(Left);
             break;
           case EMPTY:
             break;
@@ -91,6 +79,12 @@ void loop() {
           case EMPTY:
             break;
         }
+        while(Enter_Intersection_State == 1);
+      {
+      setDrivePWM( 65535, LEFT,FORWARD);
+      setDrivePWM( 65535, RIGHT,FORWARD);
+      }
+      Stop();
       break;
     case DOCKED:
       Serial.println("DOCKED");

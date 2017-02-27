@@ -29,17 +29,19 @@ void turn90(TurnDirection TurnDir)
     case Right:
       while ((ticks_Right - Right_Turn_Encoder_Vals_Start) < Turn_Ticks &&  (Left_Turn_Encoder_Vals_Start- ticks_Left ) < Turn_Ticks )
       {
-        setDrivePWM(32767, LEFT, FORWARD);
-        setDrivePWM(32767, RIGHT, BACKWARD);
+        setDrivePWM(32767, LEFT, BACKWARD);
+        setDrivePWM(32767, RIGHT, FORWARD);
         // delay(75); 
       }
-      
+      Stop();
       break;
     case Left:
        while ((ticks_Left - Left_Turn_Encoder_Vals_Start) < Turn_Ticks &&  (Right_Turn_Encoder_Vals_Start- ticks_Right ) < Turn_Ticks )
        {
-        
+        setDrivePWM(32767, LEFT, FORWARD);
+        setDrivePWM(32767, RIGHT, BACKWARD);
        }
+       Stop();
       break; 
   }
 }
