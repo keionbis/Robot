@@ -6,6 +6,8 @@ DriveStates prevState;
 Servo FourbarServo;
 Servo GripperServo;
 int runs = 0;
+int nums = 2;
+int picks = 1;
 ClawStates Stations = Depositing;
 Intersection_States Storage[4], NewTubes[4];
 int pos;
@@ -82,8 +84,39 @@ void Docked_1()
       Reverse();
       Refuel_Intersection = Find_Full_NewTubes();
       NewTubes[Refuel_Intersection] = EMPTY;
+      if(picks == nums)
+      {
         Turn_Left();
         Turn_Left();
+      }
+      if(picks > nums)
+      {
+        Turn_Left();
+        setDrivePWM(32762, RIGHT, BACKWARD);
+      setDrivePWM(32762, LEFT, BACKWARD);
+      delay(1200);
+      }
+      if(picks < nums)
+      {
+        Turn_Right();
+        setDrivePWM(32762, RIGHT, BACKWARD);
+      setDrivePWM(32762, LEFT, BACKWARD);
+      delay(1200);
+      }
+      if(Intersections<(nums+picks))
+      {
+        currentState = LINE_FOLLOW;
+      }
+      
+      if(Intersections == (nums+picks)){
+        if(picks > nums)
+      {
+        Turn_Right();
+      }
+      if(picks < nums)
+      {
+        Turn_Left();
+      }
       Stop();
       Line_Follow();
       Stop();
@@ -93,6 +126,7 @@ void Docked_1()
       Stop();
       dockval = 2;
       currentState = LINE_FOLLOW;
+      }
 }
 void Docked_2()
 {
@@ -432,7 +466,8 @@ void Start_Stop_Message()
 void Run_During_Intersection()
 {
      
-      Stop(); 
+      if(Intersections == nums)
+      { 
       setDrivePWM( 27000, LEFT, FORWARD);
       setDrivePWM( 27000, RIGHT, FORWARD);
       delay(1000);
@@ -441,6 +476,14 @@ void Run_During_Intersection()
       Stop();
       Stations == Filling;
       currentState = LINE_FOLLOW;
+      }
+      else if (Intersections != nums)
+      {
+       setDrivePWM( 27000, LEFT, FORWARD);
+      setDrivePWM( 27000, RIGHT, FORWARD);
+      delay(1000);
+      currentState = LINE_FOLLOW;
+      }
       
 
 }
