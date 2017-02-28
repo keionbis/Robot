@@ -9,5 +9,4 @@
 #include "states.h"
 #include "BTComms.h"
 #include "Messages.h"
-#include "Encoder_Transmission.h"
 #endif

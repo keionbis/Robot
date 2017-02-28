@@ -10,12 +10,8 @@ void BT_setup(){
 
 void BT_Data()
 {
-
-     while(msg.read()) {
-     msg.printMessage();
-    //msg.printMessage();
+     while(msg.read()) {    
   }
-
 }
 
 void Send_HeartBeat()

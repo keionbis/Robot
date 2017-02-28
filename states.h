@@ -5,8 +5,14 @@
 typedef enum DriveStates {
     STANDBY,  // Robot will sit and wait patiently
     LINE_FOLLOW , // Only one solid centered line to follow
+    LINE_FOLLOW_ARMS ,
     INTERSECTION , // Come to an intersection
+    INTERSECTION_2 ,
     DOCKED,  // Docked at the base of the rods
+    DOCKED1,
+    DOCKED2,
+    DOCKED2_2,
+    DOCKED3,
     STOP //stop all motors
 
 };
@@ -15,6 +21,11 @@ typedef enum DriveStates {
 typedef enum DriveSide {
   LEFT = 5, //Pin numbers
   RIGHT = 2
+};
+
+typedef enum ClawStates{
+  Depositing,
+  Filling
 };
 
 typedef enum TurnDirection {
@@ -39,15 +50,18 @@ typedef enum Intersection_States{
 //*****************************Variable Definitions****************************//
 extern DriveStates currentState;
 extern TurnDirection TurnDir;
+extern ClawStates Stations;
 extern DriveStates prevState;
 extern ArmStates currentArmState;
-extern Intersection_States ReactorStates[8];
+extern Intersection_States ReactorStates[8], Storage[4], NewTubes[4];
 extern Intersection_States IntersectionState;
 extern Servo FourbarServo;
 extern Servo GripperServo;
 extern int Intersections;
 extern int Left1sens, Left2sens, Left3sens, Center_Leftsens, Center_Rightsens, Right3sens, Right2sens, Right1sens;
 extern unsigned long timeForHeartbeat;
+extern int dockval;
+extern int dockSide;
 //extern Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
 //*****************************Function Definitions****************************//
 void Line_Follow();
@@ -73,6 +87,18 @@ void Enter_Intersection_State();
 void Standby();
 void Start_Stop_Message();
 void Extend_Fourbar();
+void Run_During_Intersection();
+void Run_During_Intersection_2();
+void Line_Follow_Arms();
+void Turn_180();
+bool Check_Line_States();
+void Extend_Fourbar_Extra();
+void Docked_3();
+void Docked_2_2();
+void Docked_2();
+void Docked_1();
+void Docked();
+void Separate_Messages();
 //***************************************************************************//
 #define LEFT_REVERSED 1
 #define RIGHT_REVERSED 0

@@ -27,14 +27,6 @@ void Messages::Store_Message(){
 }
 
 void Messages::printMessage() {
-//    for (int x = 0;x<2;x++)
-//    {
-//    for (int i = 0; i < comms.getMessageLength(); i++) {
-//      Serial.print(comms.getMessageByte(i));
-//      Serial.print(" ");
-//    }
-//    Serial.println();
-//    }
     Message = (comms.getMessageByte(3));
     if (Message == 0)
     {

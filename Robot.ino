@@ -1,101 +1,73 @@
 #include"headers.h"
- DriveStates currentState = LINE_FOLLOW;
+DriveStates currentState = LINE_FOLLOW;
 
 void setup() {
   Serial.begin(115200);
   Wire.begin();
-  //Serial.println("SETUP");
   BT_setup();
-  //printMessage();
-  //while (!Serial3.available()) {
-    //delay(50);
-  //}
+//  while (!Serial3.available()) {
+//    delay(50);
+//   }
   BT_Data();
-//  for (int i = 0;i<8;i++){
-//  Serial.println(ReactorStates[i]);
+  
+//  for(int i = 0;i<4;i++)
+//  {
+//    Serial.println(Storage[i]);
+//    Serial.println(NewTubes[i]);
 //  }
-  //Serial.println("End BT");
   Interrupt_Setup();
-  //Serial.println("End Interrupts");
   Servo_Setup();
-  //Serial.println("END SERVO SETUP");
   initDrivePWM();
-  //Serial.println("END Insitdrive");
-  //Turn_Right();
-  //delay(500);
-  Stop();
 }
 
 void loop() {
   Read_Line_Sensor();
   Send_HeartBeat();
   Start_Stop_Message();
-  switch (currentState){
+  switch (currentState) {
     case STANDBY:
       Standby();
-      Serial.println("STANDBY");
       break;
     case LINE_FOLLOW :
       Line_Follow();
-      Serial.println("LINEFOLLOW");
+      Serial.println("line");
       break;
+
     case INTERSECTION :
       Stop();
-      currentState = LINE_FOLLOW;
-      Serial.println("INTERSECTION");
-      switch(ReactorStates[Intersections-1])
-        {
-          case FULL:
-            turn90(Right);
-            while(currentState!= DOCKED)
-            {
-              Line_Follow();
-            }
-            Stop();
-            Lift_Fourbar();
-            Open_Gripper();
-            Close_Gripper();
-            Reverse();
-            turn90(Left);
-            break;
-          case EMPTY:
-            break;
-        }
-      switch(ReactorStates[Intersections])
-        {
-          case FULL:
-            Turn_Left();
-            while(currentState!= DOCKED)
-            {
-            Line_Follow();
-            }
-            Stop();
-            Lift_Fourbar();
-            Open_Gripper();
-            Close_Gripper();
-            Reverse();
-            Turn_Left();
-            break;
-          case EMPTY:
-            break;
-        }
-        while(Enter_Intersection_State == 1);
-      {
-      setDrivePWM( 65535, LEFT,FORWARD);
-      setDrivePWM( 65535, RIGHT,FORWARD);
-      }
+      Run_During_Intersection();
+      break;
+     case INTERSECTION_2 :
       Stop();
+      Run_During_Intersection_2();
       break;
     case DOCKED:
-      Serial.println("DOCKED");
+      Stop();
+      Docked();
+    break;
+    case DOCKED1:
+      Stop();
+      Docked_1();
+      break;
+    case DOCKED2:
+      Stop();
+      Docked_2();
+      break;
+    case DOCKED2_2:
+      Stop();
+      Docked_2_2();
+      break;
+    case DOCKED3:
+       Stop();
+       Docked_3();
       break;
     case STOP:
-    Serial.println("STOP");
       Stop();
+      
       break;
   }
 
-    delay(15);
+  delay(15);
 
 
 }

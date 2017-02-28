@@ -6,8 +6,13 @@ DriveStates prevState;
 Servo FourbarServo;
 Servo GripperServo;
 int runs = 0;
+ClawStates Stations = Depositing;
+Intersection_States Storage[4], NewTubes[4];
 int pos;
-int Intersections = -1;
+int Deposit_intersection, Refuel_Intersection;
+int dockSide = 0;
+int dockval = 0;
+int Intersections = 0;
 int Left1sens, Left2sens, Left3sens, Center_Leftsens, Center_Rightsens, Right3sens, Right2sens, Right1sens;
 Intersection_States ReactorStates[8];
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
@@ -15,6 +20,135 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_K
 void Standby()
 {
   delay(50);
+}
+void Separate_Messages()
+{
+  NewTubes[0] = ReactorStates[0];
+  Storage[0] = ReactorStates[1];
+  NewTubes[1] = ReactorStates[2];
+  Storage[1] = ReactorStates[3];
+  NewTubes[2] = ReactorStates[4];
+  Storage[2] = ReactorStates[5];
+  NewTubes[3] = ReactorStates[6];
+  Storage[3] = ReactorStates[7];
+  
+}
+int Find_Empty_Storage()
+{
+
+  for(int i = 0;i<4;i++)
+  {
+    if(Storage[i] == EMPTY)
+    {
+      return(i+1);
+       break;
+    }
+  }
+}
+int Find_Full_NewTubes()
+{
+  for(int i = 0;i<4;i++)
+  {
+    if(NewTubes[i] == FULL)
+    {
+      return(i+1);
+       break;
+    }
+  }
+  }
+void Docked()
+{
+  Stop();
+      Open_Gripper();
+      currentArmState == ARMSTRAIGHT;
+      Lower_Fourbar();
+      Close_Gripper();
+      Led_Empty();
+      Lift_Fourbar();
+      Stop();
+      setDrivePWM(32762, RIGHT, BACKWARD);
+      setDrivePWM(32762, LEFT, BACKWARD);
+      delay(1200);
+      Turn_180();
+      currentState = LINE_FOLLOW;
+      dockval = 1;
+}
+void Docked_1()
+{
+  Stop();
+      Extend_Fourbar();
+      Open_Gripper();
+      Lift_Fourbar();
+      Reverse();
+      Refuel_Intersection = Find_Full_NewTubes();
+      NewTubes[Refuel_Intersection] = EMPTY;
+        Turn_Left();
+        Turn_Left();
+      Stop();
+      Line_Follow();
+      Stop();
+      setDrivePWM(32762/2, RIGHT, BACKWARD);
+      setDrivePWM(32762/2, LEFT, BACKWARD);
+      delay(120);
+      Stop();
+      dockval = 2;
+      currentState = LINE_FOLLOW;
+}
+void Docked_2()
+{
+  Stop();
+      Extend_Fourbar();
+      Close_Gripper();
+      Led_Loaded();
+      delay(150);
+      Reverse();
+      Turn_Left();
+      Stop();
+      setDrivePWM(32762/2, RIGHT, BACKWARD);
+      setDrivePWM(32762/2, LEFT, BACKWARD);
+      delay(120);
+      dockval = 3;
+      dockSide = 1;
+      currentState = LINE_FOLLOW;
+}
+
+void Docked_2_2()
+{
+      Stop();
+      Extend_Fourbar();
+      Close_Gripper();
+      Led_Loaded();
+      delay(150);
+      Reverse();
+      Turn_Right();
+      Stop();
+      setDrivePWM(32762/2, RIGHT, BACKWARD);
+      setDrivePWM(32762/2, LEFT, BACKWARD);
+      delay(120);
+      dockval = 3;
+      dockSide = 0;
+      currentState = LINE_FOLLOW;
+}
+void Docked_3()
+{
+  Stop();
+      setDrivePWM(32762/2, RIGHT, BACKWARD);
+      setDrivePWM(32762/2, LEFT, BACKWARD);
+      delay(120);
+      Stop();
+      currentArmState = ARMRAISED;
+      Lower_Fourbar();
+      Open_Gripper();
+      Led_Empty();
+      Lift_Fourbar();
+      setDrivePWM(32762, RIGHT, BACKWARD);
+      setDrivePWM(32762, LEFT, BACKWARD);
+      delay(1200);
+      Turn_180();
+      currentState = LINE_FOLLOW;
+      dockval = 0;
+      
+      
 }
 void Interrupt_Setup()
 {
@@ -26,8 +160,8 @@ void Interrupt_Setup()
 
 void Servo_Setup()
 {
-  FourbarServo.attach(9);
-  GripperServo.write(10);
+  FourbarServo.attach(Fourbar_pin);
+  GripperServo.attach(Gripper_pin);
 }
 
 void Read_Line_Sensor()
@@ -41,23 +175,32 @@ void Read_Line_Sensor()
    Right2sens =analogRead(Right2);
    Right1sens =analogRead(Right1);
 }
-int Check_Line_States()
+bool Check_Line_States()
 {
-   if(Left1sens>350 && Left2sens>350 && Left3sens>350 && Center_Leftsens>350 && Center_Rightsens>350 && Right3sens>350 && Right2sens>350 && Right1sens>350)
+   if( Left2sens>350 && Left3sens>350 && Center_Leftsens>350 && Center_Rightsens>350 && Right3sens>350 && Right2sens>350)
    {
     return 1;
    }
    else{
-   return 0;
+    return 0;
    }
 }
 void Enter_Intersection_State()
 {
   Read_Line_Sensor();
-  if(Check_Line_States() == 1)
+  if((Check_Line_States() == 1) &&(currentState == LINE_FOLLOW)&&(dockval!= 0)&&(dockval!= 3))
   {
+    Intersections = Intersections+1;
+    if(dockSide == 0)
+    {
     currentState = INTERSECTION;
-    Intersections = Intersections+2;
+    }
+    else if (dockSide == 1)
+    {
+      currentState = INTERSECTION_2;
+     
+    }
+    
   }
   //delay(50);
 }
@@ -65,25 +208,68 @@ void Enter_Intersection_State()
 void Line_Follow()
 {
     Read_Line_Sensor();
-    drivepwmleft = map(analogRead(2),35,1024,27500,10000);
-    drivepwmright = map(analogRead(7),35,1024,27500,10000);
-    Serial.println(drivepwmleft);
+    drivepwmleft = map(analogRead(2),35,1024,65525/1.25,8000);
+    drivepwmright = map(analogRead(7),35,1024,65525/1.25,8000);
+    //Serial.println(drivepwmleft);
     setDrivePWM(drivepwmleft, LEFT, FORWARD);
     setDrivePWM(drivepwmright, RIGHT, FORWARD);
     Enter_Intersection_State();
 }
 
-void Turn_Right()
+void Line_Follow_Arms()
 {
-    setDrivePWM(65525, LEFT, FORWARD);
-    setDrivePWM(65525, RIGHT, BACKWARD);
+    Read_Line_Sensor();
+    drivepwmleft = map(analogRead(2),35,1024,65525,10000);
+    drivepwmright = map(analogRead(7),35,1024,65525,10000);
+    //Serial.println(drivepwmleft);
+    setDrivePWM(drivepwmleft, LEFT, FORWARD);
+    setDrivePWM(drivepwmright, RIGHT, FORWARD);
+    Enter_Intersection_State();
 }
 
 void Turn_Left()
+{ 
+ while(analogRead(Right1)<350){
+  setDrivePWM(32762, LEFT, FORWARD);
+   setDrivePWM(32762, RIGHT, BACKWARD);
+  }
+  while(analogRead(Center_Right)<350){
+  setDrivePWM(32762, LEFT, FORWARD);
+   setDrivePWM(32762, RIGHT, BACKWARD);
+   //delay(1300);
+}
+   Stop();
+ 
+
+}
+
+void Turn_Right()
 {
-   setDrivePWM(65525, LEFT, BACKWARD);
-   setDrivePWM(65525, RIGHT, FORWARD);
-   delay(375);
+  while(analogRead(Left1)<350){
+  setDrivePWM(32762, RIGHT, FORWARD);
+   setDrivePWM(32762, LEFT, BACKWARD);
+  }
+  while(analogRead(Center_Left)<400){
+  setDrivePWM(32762, RIGHT, FORWARD);
+   setDrivePWM(32762, LEFT, BACKWARD);
+   //delay(1300);
+}
+   Stop();
+ 
+}
+void Turn_180()
+{
+  while(analogRead(Left1)<350){
+  setDrivePWM(32762, RIGHT, FORWARD);
+   setDrivePWM(32762, LEFT, BACKWARD);
+  }
+  while(analogRead(Center_Left)<350){
+  setDrivePWM(32762, RIGHT, FORWARD);
+   setDrivePWM(32762, LEFT, BACKWARD);
+   //delay(1300);
+}
+   Stop();
+ 
 }
 
 void Lift_Fourbar()
@@ -93,6 +279,7 @@ void Lift_Fourbar()
   FourbarServo.write(pos);
   delay(10);
   }
+  FourbarServo.write(pos+15);
 }
 
 void Lower_Fourbar()
@@ -103,6 +290,8 @@ void Lower_Fourbar()
   delay(10);
 
   }
+   //FourbarServo.write(pos-10);
+  delay(150);
 
 }
 void Extend_Fourbar()
@@ -115,33 +304,44 @@ void Extend_Fourbar()
     FourbarServo.write(pos);
     delay(10);
   }
-
-
+  delay(150);
+  
 }
-
+void Extend_Fourbar_Extra()
+{
+  FourbarServo.write(pos-10);
+}
 void Open_Gripper()
 {
-  GripperServo.write(100);
+  GripperServo.write(80);
+  delay(150);
 }
 
 void Close_Gripper()
 {
   GripperServo.write(150);
+  delay(150);
 }
 
 void Reverse()
 {
-  Read_Line_Sensor();
-  while(Left1sens<350 && Left2sens<350 && Left3sens<350 && Center_Leftsens<350 && Center_Rightsens<350 && Right3sens<350 && Right2sens<350 && Right1sens<350)
+    Read_Line_Sensor();
+    while(!Check_Line_States())
     {
-    drivepwmleft = map(analogRead(2),35,1024,15000,27500);
-    drivepwmright = map(analogRead(7),35,1024,15000,27500);
+    Read_Line_Sensor();
+    drivepwmleft = map(analogRead(2),35,1024, 27000, 50000);
+    drivepwmright = map(analogRead(7),35,1024, 27000, 50000);
     setDrivePWM(drivepwmleft, LEFT, BACKWARD);
     setDrivePWM(drivepwmright, RIGHT, BACKWARD);
-    }
-    setDrivePWM(35000, LEFT, FORWARD);
-    setDrivePWM(35000, RIGHT, FORWARD);
     delay(15);
+    }
+    setDrivePWM( 16380*2, LEFT, FORWARD);
+    setDrivePWM( 16380*2, RIGHT, FORWARD);
+      delay(1000);
+      Stop();
+      
+    
+    
 }
 
 void Led_Empty()
@@ -150,10 +350,20 @@ void Led_Empty()
   pixels.show();
 }
 
+void Led_Off()
+{
+  pixels.setPixelColor(1, pixels.Color(0,0,0));
+  pixels.show();
+}
+
 void Led_Loaded()
 {
   pixels.setPixelColor(1, pixels.Color(255,0,0));
   pixels.show();
+  delay(100);
+  pixels.setPixelColor(1, pixels.Color(0,0,0));
+  pixels.show();
+  
 }
 
 void Stop()
@@ -163,22 +373,46 @@ void Stop()
 }
 void State_to_Docked()
 {
-  currentState = DOCKED;
+  if (dockval == 0)
+  {
+    currentState = DOCKED;
+  }
+  else if (dockval == 1)
+  {
+    currentState = DOCKED1;
+    
+    
+  }
+  else if(dockval == 2){
+    if(dockSide == 0)
+    {
+    currentState = DOCKED2;
+    }
+    else if(dockSide == 1)
+    {
+      currentState = DOCKED2_2;
+    }
+  }
+  else if(dockval == 3){
+    currentState = DOCKED3;
+  }
 }
 
 void State_to_Arm_Raised()
 {
   currentArmState = ARMRAISED;
+  //Serial.println("F");
 }
-
 void State_to_Arm_Straight()
 {
   currentArmState = ARMSTRAIGHT;
+  //Serial.println("A");
 }
 
 void State_to_Arm_Down()
 {
   currentArmState = ARMLOWERED;
+  //Serial.println("B");
 }
 
 
@@ -189,9 +423,38 @@ void Start_Stop_Message()
     prevState = currentState;
     currentState = STOP;
   }
-  if((comms.getMessageByte(0))==4)
+  if((comms.getMessageByte(0))==5)
   {
     currentState = prevState;
   }
   
+}
+void Run_During_Intersection()
+{
+     
+      Stop(); 
+      setDrivePWM( 27000, LEFT, FORWARD);
+      setDrivePWM( 27000, RIGHT, FORWARD);
+      delay(1000);
+      Stop();
+      Turn_Right();
+      Stop();
+      Stations == Filling;
+      currentState = LINE_FOLLOW;
+      
+
+}
+
+void Run_During_Intersection_2()
+{     
+      
+      Stop(); 
+      setDrivePWM( 27000, LEFT, FORWARD);
+      setDrivePWM( 27000, RIGHT, FORWARD);
+      delay(1000);
+      Stop();
+      Turn_Left();
+      Stop();
+      Stations == Filling;
+      currentState = LINE_FOLLOW;
 }
