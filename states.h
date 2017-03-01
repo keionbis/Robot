@@ -44,8 +44,8 @@ typedef enum ArmStates{
 };
 
 typedef enum Intersection_States{
-  FULL,
-  EMPTY
+  FULL = 1,
+  EMPTY = 0
 };
 //*****************************Variable Definitions****************************//
 extern DriveStates currentState;
@@ -62,6 +62,8 @@ extern int Left1sens, Left2sens, Left3sens, Center_Leftsens, Center_Rightsens, R
 extern unsigned long timeForHeartbeat;
 extern int dockval;
 extern int dockSide;
+extern int nums ;
+extern int picks;
 //extern Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
 //*****************************Function Definitions****************************//
 void Line_Follow();
@@ -99,6 +101,9 @@ void Docked_2();
 void Docked_1();
 void Docked();
 void Separate_Messages();
+void Find_Full_NewTubes();
+void Separate_Messages_2();
+int Find_Empty_Storage();
 //***************************************************************************//
 #define LEFT_REVERSED 1
 #define RIGHT_REVERSED 0

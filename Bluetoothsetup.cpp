@@ -3,14 +3,21 @@ Messages msg;
 unsigned long timeForHeartbeat;
 int loops = 0;
 void BT_setup(){
+   while (!Serial3.available()) {
+    delay(50);
+   }
+   
   comms.setup();
   msg.setup();
-  timeForHeartbeat = millis() + 1000;
+  timeForHeartbeat = millis() + 300;
+  
 }
 
 void BT_Data()
 {
-     while(msg.read()) {    
+     while(msg.read()) {
+      msg.printMessage();  
+      delay(7);  
   }
 }
 

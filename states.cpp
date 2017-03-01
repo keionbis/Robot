@@ -6,11 +6,12 @@ DriveStates prevState;
 Servo FourbarServo;
 Servo GripperServo;
 int runs = 0;
-int nums = 2;
-int picks = 1;
+int nums  = 0;
+int picks = 0;
 ClawStates Stations = Depositing;
 Intersection_States Storage[4], NewTubes[4];
 int pos;
+int Testing = 0;
 int Deposit_intersection, Refuel_Intersection;
 int dockSide = 0;
 int dockval = 0;
@@ -25,42 +26,70 @@ void Standby()
 }
 void Separate_Messages()
 {
-  NewTubes[0] = ReactorStates[0];
-  Storage[0] = ReactorStates[1];
-  NewTubes[1] = ReactorStates[2];
-  Storage[1] = ReactorStates[3];
-  NewTubes[2] = ReactorStates[4];
-  Storage[2] = ReactorStates[5];
-  NewTubes[3] = ReactorStates[6];
-  Storage[3] = ReactorStates[7];
+  NewTubes[0] = ReactorStates[1];
+  Storage[0] = ReactorStates[0];
+  NewTubes[1] = ReactorStates[3];
+  Storage[1] = ReactorStates[2];
+  NewTubes[2] = ReactorStates[5];
+  Storage[2] = ReactorStates[4];
+  NewTubes[3] = ReactorStates[7];
+  Storage[3] = ReactorStates[6];
   
 }
+void Separate_Messages_2()
+{
+  NewTubes[3] = ReactorStates[1];
+  Storage[3] = ReactorStates[0];
+  NewTubes[2] = ReactorStates[3];
+  Storage[2] = ReactorStates[2];
+  NewTubes[1] = ReactorStates[5];
+  Storage[1] = ReactorStates[4];
+  NewTubes[0] = ReactorStates[7];
+  Storage[0] = ReactorStates[6];
+  
+}
+
 int Find_Empty_Storage()
 {
-
+  if((Storage[0] == FULL)&&(Storage[1] == FULL)&&(Storage[2] == FULL)&&(Storage[3] == FULL)) 
+   {
+    Stop();
+    currentState = STANDBY;
+    //return(0);
+    }
   for(int i = 0;i<4;i++)
   {
     if(Storage[i] == EMPTY)
     {
-      return(i+1);
-       break;
+      
+      nums = i+1;
+      break;
+
     }
   }
 }
-int Find_Full_NewTubes()
+void Find_Full_NewTubes()
 {
+  if(NewTubes[0] == EMPTY &&NewTubes[1] == EMPTY&&NewTubes[2] == EMPTY&&NewTubes[3] == EMPTY) 
+   {
+    Stop();
+    currentState = STANDBY;
+    //return(0);
+    }
   for(int i = 0;i<4;i++)
   {
     if(NewTubes[i] == FULL)
     {
-      return(i+1);
-       break;
+      picks = i+1;
+      
+      break;
     }
   }
   }
 void Docked()
 {
-  Stop();
+      Stop();
+      Intersections = 0;
       Open_Gripper();
       currentArmState == ARMSTRAIGHT;
       Lower_Fourbar();
@@ -74,59 +103,113 @@ void Docked()
       Turn_180();
       currentState = LINE_FOLLOW;
       dockval = 1;
+      
 }
 void Docked_1()
 {
-  Stop();
+      Find_Full_NewTubes();
+      Stop();
       Extend_Fourbar();
       Open_Gripper();
       Lift_Fourbar();
       Reverse();
-      Refuel_Intersection = Find_Full_NewTubes();
-      NewTubes[Refuel_Intersection] = EMPTY;
       if(picks == nums)
       {
         Turn_Left();
         Turn_Left();
+        Stop();
+        Line_Follow();
+        Stop();
+        setDrivePWM(32762/2, RIGHT, BACKWARD);
+        setDrivePWM(32762/2, LEFT, BACKWARD);
+        delay(120);
+        Stop();
+        dockval = 2;
+        currentState = LINE_FOLLOW;
       }
       if(picks > nums)
       {
+        if (dockSide == 0){
         Turn_Left();
-        setDrivePWM(32762, RIGHT, BACKWARD);
-      setDrivePWM(32762, LEFT, BACKWARD);
-      delay(1200);
-      }
-      if(picks < nums)
-      {
+        }
+        else if (dockSide == 1){
         Turn_Right();
+        }
         setDrivePWM(32762, RIGHT, BACKWARD);
-      setDrivePWM(32762, LEFT, BACKWARD);
-      delay(1200);
-      }
-      if(Intersections<(nums+picks))
-      {
+        setDrivePWM(32762, LEFT, BACKWARD);
+        delay(120);
+        Reverse();
+        setDrivePWM( 16380*2, LEFT, FORWARD);
+        setDrivePWM( 16380*2, RIGHT, FORWARD);
+        delay(900);
+        while(Intersections< picks)
+        {
+          if (Check_Line_States() == 1)
+          {
+            Intersections++;
+          }
+          
+        }
+        Stop();
+        if (dockSide == 0){
+        Turn_Left();
+        }
+        else if (dockSide == 1){
+          Turn_Right();
+        }
+        
+        Stop();
+        Line_Follow();
+        Stop();
+        setDrivePWM(32762/2, RIGHT, BACKWARD);
+        setDrivePWM(32762/2, LEFT, BACKWARD);
+        delay(120);
+        Stop();
+        dockval = 2;
         currentState = LINE_FOLLOW;
-      }
-      
-      if(Intersections == (nums+picks)){
-        if(picks > nums)
-      {
-        Turn_Right();
+       
       }
       if(picks < nums)
       {
+        if (dockSide == 1){
         Turn_Left();
-      }
-      Stop();
-      Line_Follow();
-      Stop();
-      setDrivePWM(32762/2, RIGHT, BACKWARD);
-      setDrivePWM(32762/2, LEFT, BACKWARD);
+        }
+        else if (dockSide == 0){
+        Turn_Right();
+        }
+        setDrivePWM(32762, RIGHT, BACKWARD);
+      setDrivePWM(32762, LEFT, BACKWARD);
       delay(120);
-      Stop();
-      dockval = 2;
-      currentState = LINE_FOLLOW;
+       Reverse();
+       setDrivePWM( 16380*2, LEFT, FORWARD);
+        setDrivePWM( 16380*2, RIGHT, FORWARD);
+        delay(800);
+       while(Intersections> picks)
+        {
+          if (Check_Line_States() == 1)
+          {
+            Intersections--;
+          }
+          
+        }
+        if (dockSide == 1){
+        Turn_Left();
+        }
+        else if (dockSide == 0){
+          Turn_Right();
+        }
+        Stop();
+        Line_Follow();
+        Stop();
+        setDrivePWM(32762/2, RIGHT, BACKWARD);
+        setDrivePWM(32762/2, LEFT, BACKWARD);
+        delay(120);
+        Stop();
+        dockval = 2;
+        currentState = LINE_FOLLOW;
+       
       }
+      NewTubes[picks-1] = EMPTY;
 }
 void Docked_2()
 {
@@ -168,7 +251,7 @@ void Docked_3()
   Stop();
       setDrivePWM(32762/2, RIGHT, BACKWARD);
       setDrivePWM(32762/2, LEFT, BACKWARD);
-      delay(120);
+      delay(180);
       Stop();
       currentArmState = ARMRAISED;
       Lower_Fourbar();
@@ -222,6 +305,7 @@ bool Check_Line_States()
 void Enter_Intersection_State()
 {
   Read_Line_Sensor();
+  
   if((Check_Line_States() == 1) &&(currentState == LINE_FOLLOW)&&(dockval!= 0)&&(dockval!= 3))
   {
     Intersections = Intersections+1;
@@ -263,13 +347,13 @@ void Line_Follow_Arms()
 
 void Turn_Left()
 { 
- while(analogRead(Right1)<350){
-  setDrivePWM(32762, LEFT, FORWARD);
-   setDrivePWM(32762, RIGHT, BACKWARD);
+ while(analogRead(Right1)<400){
+  setDrivePWM(20000, LEFT, FORWARD);
+   setDrivePWM(20000, RIGHT, BACKWARD);
   }
-  while(analogRead(Center_Right)<350){
-  setDrivePWM(32762, LEFT, FORWARD);
-   setDrivePWM(32762, RIGHT, BACKWARD);
+  while(analogRead(Center_Right)<300){
+  setDrivePWM(16500, LEFT, FORWARD);
+   setDrivePWM(16500, RIGHT, BACKWARD);
    //delay(1300);
 }
    Stop();
@@ -279,13 +363,13 @@ void Turn_Left()
 
 void Turn_Right()
 {
-  while(analogRead(Left1)<350){
-  setDrivePWM(32762, RIGHT, FORWARD);
-   setDrivePWM(32762, LEFT, BACKWARD);
+  while(analogRead(Left1)<275){
+  setDrivePWM(22000, RIGHT, FORWARD);
+   setDrivePWM(22000, LEFT, BACKWARD);
   }
-  while(analogRead(Center_Left)<400){
-  setDrivePWM(32762, RIGHT, FORWARD);
-   setDrivePWM(32762, LEFT, BACKWARD);
+  while(analogRead(Center_Left)<275){
+  setDrivePWM(20000, RIGHT, FORWARD);
+   setDrivePWM(20000, LEFT, BACKWARD);
    //delay(1300);
 }
    Stop();
@@ -293,11 +377,11 @@ void Turn_Right()
 }
 void Turn_180()
 {
-  while(analogRead(Left1)<350){
+  while(analogRead(Left1)<275){
   setDrivePWM(32762, RIGHT, FORWARD);
    setDrivePWM(32762, LEFT, BACKWARD);
   }
-  while(analogRead(Center_Left)<350){
+  while(analogRead(Center_Left)<300){
   setDrivePWM(32762, RIGHT, FORWARD);
    setDrivePWM(32762, LEFT, BACKWARD);
    //delay(1300);
@@ -363,8 +447,8 @@ void Reverse()
     while(!Check_Line_States())
     {
     Read_Line_Sensor();
-    drivepwmleft = map(analogRead(2),35,1024, 27000, 50000);
-    drivepwmright = map(analogRead(7),35,1024, 27000, 50000);
+    drivepwmleft = map(analogRead(2),35,1024, 18000, 35000);
+    drivepwmright = map(analogRead(7),35,1024, 18000, 35000 );
     setDrivePWM(drivepwmleft, LEFT, BACKWARD);
     setDrivePWM(drivepwmright, RIGHT, BACKWARD);
     delay(15);
@@ -465,7 +549,8 @@ void Start_Stop_Message()
 }
 void Run_During_Intersection()
 {
-     
+      Find_Empty_Storage();
+      Serial.println(nums);
       if(Intersections == nums)
       { 
       setDrivePWM( 27000, LEFT, FORWARD);
@@ -475,6 +560,7 @@ void Run_During_Intersection()
       Turn_Right();
       Stop();
       Stations == Filling;
+      Storage[nums-1] = FULL;
       currentState = LINE_FOLLOW;
       }
       else if (Intersections != nums)
@@ -482,8 +568,10 @@ void Run_During_Intersection()
        setDrivePWM( 27000, LEFT, FORWARD);
       setDrivePWM( 27000, RIGHT, FORWARD);
       delay(1000);
+      
       currentState = LINE_FOLLOW;
       }
+      
       
 
 }
@@ -491,7 +579,9 @@ void Run_During_Intersection()
 void Run_During_Intersection_2()
 {     
       
-      Stop(); 
+      Find_Empty_Storage();
+      if(Intersections == nums)
+      { 
       setDrivePWM( 27000, LEFT, FORWARD);
       setDrivePWM( 27000, RIGHT, FORWARD);
       delay(1000);
@@ -499,5 +589,19 @@ void Run_During_Intersection_2()
       Turn_Left();
       Stop();
       Stations == Filling;
+       Storage[nums-1] = FULL;
       currentState = LINE_FOLLOW;
+      }
+      else if (Intersections != nums)
+      {
+       setDrivePWM( 27000, LEFT, FORWARD);
+      setDrivePWM( 27000, RIGHT, FORWARD);
+      delay(1000);
+     
+      currentState = LINE_FOLLOW;
+      
+      }
+      
+      
+
 }

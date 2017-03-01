@@ -27,6 +27,15 @@ void Messages::Store_Message(){
 }
 
 void Messages::printMessage() {
+for (int i = 0; i < 2; i++) {
+      Serial.print(comms.getMessageByte(i));
+      Serial.print(" ");
+      Message = (comms.getMessageByte(3));
+      
+    }
+    //Serial.println(Message);
+    Serial.println();
+
     Message = (comms.getMessageByte(3));
     if (Message == 0)
     {
@@ -62,7 +71,7 @@ void Messages::printMessage() {
     }
     else if (Message == 4)
     {
-      Serial.println("3");
+      Serial.println("4");
       ReactorStates[i] = EMPTY;
       ReactorStates[i+2] = EMPTY;
       ReactorStates[i+4] = FULL;
@@ -168,8 +177,15 @@ bool Messages::read() {
 		case kRadiationAlert:
 			break;
 		case kStopMovement:
+   if(comms.getMessageByte(2) == 0x03 || comms.getMessageByte(2) == 0x00){
+    prevState = currentState;
+    currentState = STOP;
+   }
 			break;
 		case kResumeMovement:
+   if(comms.getMessageByte(2) == 0x03 || comms.getMessageByte(2) == 0x00){
+    currentState = prevState ;
+   }
 			break;
 		case kRobotStatus:
 			break;
