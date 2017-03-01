@@ -42,6 +42,11 @@ typedef enum ArmStates{
   ARMSTRAIGHT,
   ARMLOWERED
 };
+typedef enum LedStates{
+  NoRadiation,
+  LowRadiation,
+  HighRadiation
+};
 
 typedef enum Intersection_States{
   FULL = 1,
@@ -64,6 +69,8 @@ extern int dockval;
 extern int dockSide;
 extern int nums ;
 extern int picks;
+extern int drivepwmright, drivepwmleft, pos;
+//extern LedStates RadiationStates;
 //extern Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
 //*****************************Function Definitions****************************//
 void Line_Follow();
@@ -104,6 +111,7 @@ void Separate_Messages();
 void Find_Full_NewTubes();
 void Separate_Messages_2();
 int Find_Empty_Storage();
+void Led_Off();
 //***************************************************************************//
 #define LEFT_REVERSED 1
 #define RIGHT_REVERSED 0

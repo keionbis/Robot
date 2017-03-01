@@ -19,6 +19,16 @@ void BTComms::writeMessage(unsigned char b1, unsigned char b2, unsigned char b3)
   Serial3.write(0xff - (b1 + b2 + b3 + 5));
 }
 
+void BTComms::writeMessage2(unsigned char b1, unsigned char b2, unsigned char b3, unsigned char b4) {
+  Serial3.write(kMessageStart);
+  Serial3.write(6);
+  Serial3.write(b1);
+  Serial3.write(b2);
+  Serial3.write(b3);
+  Serial3.write(0xff - (b1 + b2 + b3 + 5));
+  Serial3.write(b4);
+}
+
 int BTComms::getMessageLength() {
   return messageLength;
 }

@@ -19,6 +19,7 @@ public:
 	bool read();
 	void setup();
 	void printMessage();
+  void SendUpdate_Radiation(unsigned char b4);
 
 private:
 	bool stopped;

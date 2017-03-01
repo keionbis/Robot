@@ -8,6 +8,7 @@ class BTComms {
     unsigned char getMessageByte(unsigned index);
     bool read();
     void writeMessage(unsigned char b1, unsigned char b2, unsigned char b3);
+    void writeMessage2(unsigned char b1, unsigned char b2, unsigned char b3, unsigned char b4);
    private:
     enum BTstate {kLookingForStart, kReadingMessageLength, kReadMessage} BTstate;
     unsigned messageLength;
@@ -19,5 +20,5 @@ void BT_setup();
 void BT_Data();
 void Send_HeartBeat();
 extern BTComms comms;
-
+void Send_Update_Radiation(unsigned char b4);
 #endif

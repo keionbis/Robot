@@ -3,7 +3,7 @@
 #define Fourbar_pin 9
 #define Gripper_pin 8
 
-#define LED_pin 22
+#define LED_pin 12
 #define NUMPIXELS 1
 
 #define LEFT_DIR_PIN 4

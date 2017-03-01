@@ -16,6 +16,11 @@ bool Messages::isStopped() {
 
 void Messages::sendHeartbeat() {
 	comms.writeMessage(kHeartbeat, 0x0a, 0x00);
+  
+}
+void Messages::SendUpdate_Radiation(unsigned char b4)
+{
+  comms.writeMessage2(kRadiationAlert, 0x0a, 0x00, b4);
 }
 
 void Messages::Store_Message(){
@@ -178,13 +183,18 @@ bool Messages::read() {
 			break;
 		case kStopMovement:
    if(comms.getMessageByte(2) == 0x03 || comms.getMessageByte(2) == 0x00){
+    if(currentState != STOP)
+    {
     prevState = currentState;
+    Serial.println(prevState);
+    }
     currentState = STOP;
+    Serial.println(currentState);
    }
 			break;
 		case kResumeMovement:
    if(comms.getMessageByte(2) == 0x03 || comms.getMessageByte(2) == 0x00){
-    currentState = prevState ;
+    currentState = prevState;
    }
 			break;
 		case kRobotStatus:

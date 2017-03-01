@@ -28,3 +28,8 @@ void Send_HeartBeat()
     msg.sendHeartbeat();
   }
 }
+void Send_Update_Radiation(unsigned char b4)
+{
+  msg.SendUpdate_Radiation(b4);
+}
+
