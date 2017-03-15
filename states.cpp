@@ -312,7 +312,11 @@ void Start_Stop_Message()
   {
     currentState = prevState;
   }
-  
+  while(currentState == STOP)
+  {
+    Stop();
+    Start_Stop_Message();
+  }
 }
 
 //************************************************************************************************************************************

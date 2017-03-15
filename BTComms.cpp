@@ -1,9 +1,9 @@
 #include"headers.h"
 
 BTComms::BTComms() {
-	messageIndex = 0;
-	messageLength = 0;
-	BTstate = kLookingForStart;
+  messageIndex = 0;
+  messageLength = 0;
+  BTstate = kLookingForStart;
 }
 
 void BTComms::setup() {
@@ -21,12 +21,12 @@ void BTComms::writeMessage(unsigned char b1, unsigned char b2, unsigned char b3)
 
 void BTComms::writeMessage2(unsigned char b1, unsigned char b2, unsigned char b3, unsigned char b4) {
   Serial3.write(kMessageStart);
-  Serial3.write(6);
+  Serial3.write(5);
   Serial3.write(b1);
   Serial3.write(b2);
   Serial3.write(b3);
-  Serial3.write(0xff - (b1 + b2 + b3 + 5));
   Serial3.write(b4);
+  Serial3.write(0xff - (b1 + b2 + b3 + b4 + 5));
 }
 
 int BTComms::getMessageLength() {
@@ -43,7 +43,7 @@ bool BTComms::read() {
     switch (BTstate) {
       case kLookingForStart:
         if (inByte != kMessageStart)
-        	break;
+          break;
         BTstate = kReadingMessageLength;
         break;
       case kReadingMessageLength:
@@ -58,9 +58,10 @@ bool BTComms::read() {
           return true;
         }
         break;
-       default:
+      default:
         Serial.println("Invalid state");
     }
   }
   return false;
 }
+

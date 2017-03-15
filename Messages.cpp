@@ -15,12 +15,12 @@ bool Messages::isStopped() {
 }
 
 void Messages::sendHeartbeat() {
-	comms.writeMessage(kHeartbeat, 0x0a, 0x00);
+	comms.writeMessage(kHeartbeat, 0x03, 0x00);
   
 }
 void Messages::SendUpdate_Radiation(unsigned char b4)
 {
-  comms.writeMessage2(kRadiationAlert, 0x0a, 0x00, b4);
+  comms.writeMessage2(kRadiationAlert, 0x03, 0x00,b4);
 }
 
 void Messages::Store_Message(){

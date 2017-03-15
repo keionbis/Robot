@@ -16,8 +16,8 @@ void BT_setup(){
 void BT_Data()
 {
      while(msg.read()) {
-      msg.printMessage();  
-      delay(7);  
+     msg.printMessage();  
+     delay(7);  
   }
 }
 
@@ -28,8 +28,3 @@ void Send_HeartBeat()
     msg.sendHeartbeat();
   }
 }
-void Send_Update_Radiation(unsigned char b4)
-{
-  msg.SendUpdate_Radiation(b4);
-}
-

@@ -1,5 +1,6 @@
 #ifndef STATES_H
 #define STATES_H
+#include "headers.h"
 //*****************************State Definitions****************************//
 
 typedef enum DriveStates {
@@ -70,6 +71,8 @@ extern int dockSide;
 extern int nums ;
 extern int picks;
 extern int drivepwmright, drivepwmleft, pos;
+extern unsigned char b4;
+//extern Messages msg;
 //extern LedStates RadiationStates;
 //extern Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_pin, NEO_GRB + NEO_KHZ800);
 //*****************************Function Definitions****************************//

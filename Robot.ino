@@ -4,9 +4,9 @@ DriveStates currentState = LINE_FOLLOW;
 #define NUMPIXELS      1
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 int delayval = 5; // delay for half a second
+Messages msg_2;
 void setup() {
   pixels.begin(); 
-
   Serial3.begin(115200);
   Serial.begin(9600);
   BT_setup();
@@ -25,7 +25,7 @@ void setup() {
   //Serial.println(picks);
   initDrivePWM();
   Lift_Fourbar();
-  Send_Update_Radiation(0xFF);
+  
 }
 
 void loop() {
@@ -103,7 +103,10 @@ void Led_Empty()
     pixels.show(); // This sends the updated pixel color to the hardware.
     delay(delayval); // Delay for a period of time (in milliseconds).
   }
-  //Send_Update_Radiation(0x2C);
+  //b4 = (0x2C);
+  
+  //msg_2.SendUpdate_Radiation(0x2C);
+  
 }
 
 void Led_Off()
@@ -113,7 +116,9 @@ void Led_Off()
     pixels.show(); // This sends the updated pixel color to the hardware.
     delay(delayval); // Delay for a period of time (in milliseconds).
   }
-  //Send_Update_Radiation(0x00);
+  //Send_Update_Radiation
+  //b4 = (0x00);
+ // msg_2.SendUpdate_Radiation(0x00);
 }
 
 
@@ -124,5 +129,8 @@ void Led_Loaded()
     pixels.show(); // This sends the updated pixel color to the hardware.
     delay(delayval); // Delay for a period of time (in milliseconds).
   }
-  //Send_Update_Radiation(0xFF);
+  //Send_Update_Radiation
+  //b4 = (0xFF);
+  //msg_2.SendUpdate_Radiation(0xFF);
 }
+
